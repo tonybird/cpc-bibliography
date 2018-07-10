@@ -19,16 +19,21 @@ $meta = get_post_meta( $post->ID, 'bib_fields', true );
 		<h2><?php the_title(); ?></h2>
 
 		<?php
+		//the_meta();
 				include 'bib-fields.php';
-				// print_r(get_post_meta($post->ID));
+				//print_r(get_post_meta($post->ID));
 				foreach($frontendfields as $fieldtitle => $fieldid) {
 					switch ($fieldid) {
 						case "url":
+						if (!empty(get_field('url'))){
 							if (strpos(get_field('url'), 'http') !== false) {
 								$val = "<a href='".$post->url."'>".$post->url."</a>";
 							} else {
 								$val = "<a href='http://doi.org/".$post->url."'>".$post->url."</a>";
 							}
+						} else {
+							$val = "";
+						}
 								break;
 						case "type":
 						//make reference type pretty (JOUR -> Journal)
@@ -38,16 +43,16 @@ $meta = get_post_meta( $post->ID, 'bib_fields', true );
 						case "authors":
 						case "editors":
 						case "series-authors":
-							$val = implode("</br>",$post->authors);
+							$val = implode("</br>",$post->$fieldid);
 								break;
 						default:
 							$val = $post->$fieldid;
 					}
 
-					//do not display empty fields
-					if (get_field($fieldid) != "") {
-						echo "<p><h4>" . $fieldtitle . "</h4>" . $val . "</p>";
-					}
+					//do not display empty fields OR arrays that only contain another empty array
+					if (!empty($val) && !empty($val[0])) {
+						 echo "<p><h4>" . $fieldtitle . "</h4>" . $val . "</p>";
+				 }
 				}
 
 				//Generate .RIS download
