@@ -1,79 +1,60 @@
 <?php
 add_shortcode('reflib', 'reflib_test');
 
-/**
-* still need to make changes in lib/RefLib-master/drivers/ris.php
-*/
-
 function reflib_test() {
+  // [reflib] shortcode is just used for testing import- calls the same import
+  // function as the importer page
+
   require( plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/reflib.php');
 
   $lib = new RefLib();
   $lib->SetContentsFile(plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/tests/data/cpc-ris.txt');
 
-  //Import first $n entries starting at $start
-  $n = 1;
-  $start = 0;
-  $start = rand(0,5000);
-  $testlib = array_slice($lib->refs, $start, $n);
+  $n = 10; //number of entries to import
+  $start = rand(0,5000);  //starting entry number
+  $smalllib = array_slice($lib->refs, $start, $n);
+  // $wholelib = $lib->refs;
 
-  //Import all entries
-  //$testlib = $lib->refs;
-
-  import_reflib_ris($testlib);
+  import_reflib_ris($smalllib);
 }
 
 function import_reflib_ris($lib) {
-  //print_r($lib);
+  remove_action('save_post', 'save_bib_fields_meta');
+  echo "<h4>Importing " .count($lib)." bibliography entries:</h4>";
 
-
-  include( plugin_dir_path( __FILE__ ) . 'citation-from-id.php');
-
-  echo "<h4>Importing " .count($lib)." new bibliography entries:</h4>";
-
-  foreach($lib as $key => $field) {
-    echo "<b>{$key}</b></br>";
-
-    $bibfields = array(
-      'title' => $field['title'],
-      'secondary-title' => $field['secondary-title'],
-      'authors' => implode("\n",$field['authors']),
-      'abstract' => $field['abstract'],
-      'year-published' => $field['year'],
-      'reference-type' => trim(strtoupper($field['type'])),
-      'notes' => $field['notes'],
-      'section' => $field['section'],
-      'issn-isbn' => $field['isbn'],
-      'volume-number' => $field['volume'],
-      'issue-number' => $field['number'],
-      'editors' => implode("\n",$field['editors']),
-      'publication-city' => $field['city'],
-      'publisher' => $field['publisher']
-    );
-
-    foreach ($bibfields as $field=>$data) {
-      echo $field.": ".$data."</br>";
-    }
+  foreach($lib as $num => $fields) {
+    echo "<b>Importing #" . ($num+1)."</br></b>";
 
     $new_bib = array(
-      'post_title'    => wp_strip_all_tags($bibfields['title']),
+      'post_title'    =>  wp_strip_all_tags($fields['title']),
       'post_status'   => 'publish',
-      'post_type'     => 'bib',
-      'post_author'   => 1,
-      'meta_input'    => array(
-        'bib_fields'  => $bibfields
-      )
+      'post_type'     => 'bib'
     );
 
     $id = wp_insert_post( $new_bib );
+    if(is_wp_error($id)){
+      //there was an error in the post insertion,
+      echo $post_id->get_error_message();
+    }
 
-    echo("<b>Citation: </b>".citation_from_id($id));
-    $bibfields['citation'] = citation_from_id($id);
-    update_post_meta( $id, 'bib_fields', $bibfields );
+   foreach ($fields as $fieldname => $fieldvalue) {
+       echo "<b>{$fieldname}:</b> ";
+       print_r($fieldvalue);
+       echo "</br>";
+       if (is_string($fieldvalue)) $fieldvalue = trim($fieldvalue);
+       if (is_array($fieldvalue)) $fieldvalue = array_map('trim', $fieldvalue);
+
+    update_post_meta($id, $fieldname, $fieldvalue);
+   }
+
+    $citation = citation_from_id($id);
+    echo("<b>Citation: </b>".$citation);
+    update_post_meta( $id, 'citation', $citation );
 
     echo "</br></br>";
+   }
+   add_action( 'save_post', 'save_bib_fields_meta' );
 
-  }
 }
 
 ?>

@@ -14,11 +14,11 @@ function display_entries() {
   'orderby'   => 'title',
   'order' => 'ASC'
   // 'meta_query' => array(
-  //      'order_clause' => array(
-  //           'key' => 'order_in_archive',
-  //           'value' => 'some_value',
+  //        'bibfields' => array(
+  //           'key' => 'year-published',
+  //           'value' => '2009',
   //           'type' => 'NUMERIC' // unless the field is not a number
-  // ))
+  //   ))
 );
   $wpb_all_query = new WP_Query($args);
 
@@ -26,9 +26,9 @@ function display_entries() {
     echo "<ul>";
     while ( $wpb_all_query->have_posts() ) : $wpb_all_query->the_post();
     global $post;
-    $meta = get_post_meta( $post->ID, 'bib_fields', true );
-    if ($meta['citation'] !== "") {
-      echo "<p>".$meta['citation']."</p>";
+
+    if (get_field('citation') !== "") {
+      echo "<p>".get_field('citation')."</p>";
     }
   endwhile;
   echo "</ul>";

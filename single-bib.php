@@ -19,34 +19,33 @@ $meta = get_post_meta( $post->ID, 'bib_fields', true );
 		<h2><?php the_title(); ?></h2>
 
 		<?php
-
 				include 'bib-fields.php';
+				// print_r(get_post_meta($post->ID));
 				foreach($frontendfields as $fieldtitle => $fieldid) {
 					switch ($fieldid) {
 						case "url":
-							if (strpos($meta['url'], 'http') !== false) {
-								$val = "<a href='".$meta['url']."'>".$meta['url']."</a>";
+							if (strpos(get_field('url'), 'http') !== false) {
+								$val = "<a href='".$post->url."'>".$post->url."</a>";
 							} else {
-								$val = "<a href='http://doi.org/".$meta['url']."'>".$meta['url']."</a>";
+								$val = "<a href='http://doi.org/".$post->url."'>".$post->url."</a>";
 							}
 								break;
-						case "reference-type":
+						case "type":
 						//make reference type pretty (JOUR -> Journal)
-							$val = $referencetypes[$meta[$fieldid]];
+							$val = $referencetypes[$post->type];
 								break;
 						case "keywords":
 						case "authors":
 						case "editors":
 						case "series-authors":
-						//change new lines to <br> tags for text areas
-							$val = nl2br($meta[$fieldid]);
+							$val = implode("</br>",$post->authors);
 								break;
 						default:
-							$val = $meta[$fieldid];
+							$val = $post->$fieldid;
 					}
 
 					//do not display empty fields
-					if ($meta[$fieldid] != "") {
+					if (get_field($fieldid) != "") {
 						echo "<p><h4>" . $fieldtitle . "</h4>" . $val . "</p>";
 					}
 				}
@@ -55,22 +54,20 @@ $meta = get_post_meta( $post->ID, 'bib_fields', true );
 				require( plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/reflib.php');
 				$newlib = new RefLib();
 				$newlib->SetContentsFile('.ris');
-				$newlib->refs[0] = array(
-					"abstract" => $meta['abstract'],
-					"type" => $meta['reference-type'],
-					"title" => $meta['title'],
-					"year" => $meta['year-published'],
-					"publisher" => $meta['publisher'],
-					"city" => $meta['publication-city'],
-					"secondary-title" => $meta['secondary-title']
-				);
+				$newlib->refs[0]["title"] = $post->title;
+				foreach ($frontendfields as $title => $key) {
+					if ($post->$key) {
+						$newlib->refs[0][$key] = $post->$key;
+					}
+				}
 				$tofile = $newlib->GetContents(); // Output file to the browser
 				$tofile = str_replace("\\n", '', $tofile);
 
-				if(strlen($meta['title']) > 25) {
-					$filename = substr($meta['title'], 0, strpos($meta['title'], ' ', 25));
+				//.RIS Filename
+				if(strlen($post->title) > 25) {
+					$filename = substr($post->title, 0, strpos($post->title, ' ', 25));
 				} else {
-					$filename = $meta['title'];
+					$filename = $post->title;
 				}
 				$filename = str_replace(' ', '-', $filename); // Replaces all spaces with hyphens.
 				$filename =  preg_replace('/[^A-Za-z0-9\-]/', '', $filename); // Removes special chars.
