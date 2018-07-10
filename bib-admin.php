@@ -165,13 +165,7 @@ function bibliography_admin_style() {
       }
 
         //generate citation from bibliography fields
-      //  include( plugin_dir_path( __FILE__ ) . 'generate-citation.php');
-    //    generate_citation();
-
-      //  include( plugin_dir_path( __FILE__ ) . 'citation-from-id.php');
         update_post_meta($post_id, "citation", citation_from_id($post_id));
-
-
 
     }
     add_action( 'save_post', 'save_bib_fields_meta' );
