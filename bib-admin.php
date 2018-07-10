@@ -165,8 +165,21 @@ function bibliography_admin_style() {
       }
 
         //generate citation from bibliography fields
+      //  include( plugin_dir_path( __FILE__ ) . 'generate-citation.php');
+    //    generate_citation();
+
+      //  include( plugin_dir_path( __FILE__ ) . 'citation-from-id.php');
         update_post_meta($post_id, "citation", citation_from_id($post_id));
+
+
 
     }
     add_action( 'save_post', 'save_bib_fields_meta' );
+    // add_action( 'updated_bib_meta', 'prepare_for_search', 10, 4);
+    //
+    // prepare_for_search($meta_id, $object_id, $meta_key, $_meta_value) {
+    //   update_post_meta($object_id, 'authorstring', implode(get_post_meta($object_id, 'authors', true)));
+    // }
+
+
  ?>
