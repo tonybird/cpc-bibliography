@@ -9,7 +9,34 @@ function add_ris_importer() {
 function ris_importer_page() {
 
 ?>
-<div class="wrap"><h1>RIS Bibliography Importer</h1></br></div>
+<div class="wrap"><h1>CPC Bibliography Plugin</h1></div>
+
+<?php settings_errors(); ?>
+
+<h2>Display Settings</h2>
+
+<div><form enctype="multipart/form-data" action="" method="post">
+
+		<fieldset>
+			<legend>Select the fields that should be displayed to the public:</legend>
+		</br>
+			<div>
+						 <input type="checkbox" name="keywords"/>
+						 <label for="keywords">Keywords</label>
+					 </div>
+					 <div>
+						 <input type="checkbox" name="notes" />
+						 <label for="notes">Notes</label>
+				 </div>
+
+		</fieldset>
+
+		<p><input type="submit" name="options-submit" id="submit" class="button button-default" value="Save" /></p>
+
+	</form></div>
+</br>
+
+<h2>RIS Importer</h2>
 
 <div><form enctype="multipart/form-data" action="" method="post">
 
@@ -26,13 +53,26 @@ function ris_importer_page() {
 			</div>
 		</fieldset>
 
-		<p><input type="submit" name="submit" id="submit" class="button button-primary" value="Import Now" /></p>
+</fieldset>
+
+		<p><input type="submit" name="import-submit" id="submit" class="button button-primary" value="Import Now" /></p>
 
 	</form></div>
 
+
 	<?php
 
-	if ( ! empty( $_POST ) ) {
+	if ( ! empty( $_POST['options-submit'] ) ) {
+		if ($_POST['notes']) {
+			echo "Displaying notes!";
+		}
+		if ($_POST['keywords']) {
+			echo "Displaying keywords!";
+		}
+}
+
+
+	if ( ! empty( $_POST['import-submit'] ) ) {
 
 		if ($_POST['overwrite'] === 'true') {
 			$bibentries = get_posts( array( 'post_type' => 'bib', 'numberposts' => 10000));
