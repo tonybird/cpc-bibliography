@@ -18,9 +18,21 @@ function reflib_test() {
   import_reflib_ris($smalllib);
 }
 
-function import_reflib_ris($lib) {
+
+function import_reflib_ris($lib, $opts) {
   remove_action('save_post', 'save_bib_fields_meta');
+
   echo "<h4>Importing " .count($lib)." bibliography entries:</h4>";
+
+  if ($opts->keywords == 1) {
+    echo "<b>Importing keywords</b></br>";
+    $importkeywords = true;
+  }
+  if ($opts->notes == 1) {
+    echo "<b>Importing notes</b></br>";
+    $importnotes = true;
+  }
+  echo "</br>";
 
   foreach($lib as $num => $fields) {
     echo "<b>Importing #" . ($num+1)."</br></b>";
@@ -45,6 +57,12 @@ function import_reflib_ris($lib) {
        if (is_array($fieldvalue)) $fieldvalue = array_map('trim', $fieldvalue);
 
     update_post_meta($id, $fieldname, $fieldvalue);
+   }
+   if (!$importkeywords) {
+     update_post_meta($id, "keywords", "");
+   }
+   if (!$importnotes) {
+     update_post_meta($id, "notes", "");
    }
 
     $citation = citation_from_id($id);

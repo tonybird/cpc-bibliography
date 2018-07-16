@@ -1,42 +1,49 @@
 <?php
 
-add_action('admin_menu', 'add_ris_importer');
-
-function add_ris_importer() {
-	add_management_page('RIS Importer', 'RIS Importer', 'administrator', 'ris-importer', 'ris_importer_page');
+class ImportOptions {
+  public $keywords = true;
+  public $notes = true;
 }
 
+add_action('admin_menu', 'add_bib_subpages');
+
+function add_bib_subpages() {
+add_submenu_page('edit.php?post_type=bib', 'Import RIS File', 'Import RIS File', 'manage_options', 'ris-import', 'ris_importer_page');
+add_submenu_page('edit.php?post_type=bib', 'Bibliography Settings', 'Settings', 'manage_options', 'bib-settings', 'bib_settings_page');
+
+}
+
+function bib_settings_page() {
+  ?>
+  <div class="wrap"><h1>Bibliography Settings</h1></div>
+  <h2>Display Options</h2>
+
+  <div><form enctype="multipart/form-data" action="" method="post">
+
+  		<fieldset>
+  			<legend><b>Hide selected fields</b> (if imported)</legend>
+  			<div>
+  						 <input type="checkbox" name="keywords" id="keywords"/>
+  						 <label for="keywords">Keywords</label>
+  					 </div>
+  					 <div>
+  						 <input type="checkbox" name="notes" id="notes" />
+  						 <label for="notes">Notes</label>
+  				 </div>
+
+  		</fieldset>
+
+  		<p><input type="submit" name="options-submit" id="submit" class="button button-default" value="Save" /></p>
+
+  	</form></div>
+  <?php
+}
 function ris_importer_page() {
 
 ?>
-<div class="wrap"><h1>CPC Bibliography Plugin</h1></div>
+<div class="wrap"><h1>Import RIS File</h1></div>
 
 <?php settings_errors(); ?>
-
-<h2>Display Settings</h2>
-
-<div><form enctype="multipart/form-data" action="" method="post">
-
-		<fieldset>
-			<legend>Select the fields that should be displayed to the public:</legend>
-		</br>
-			<div>
-						 <input type="checkbox" name="keywords"/>
-						 <label for="keywords">Keywords</label>
-					 </div>
-					 <div>
-						 <input type="checkbox" name="notes" />
-						 <label for="notes">Notes</label>
-				 </div>
-
-		</fieldset>
-
-		<p><input type="submit" name="options-submit" id="submit" class="button button-default" value="Save" /></p>
-
-	</form></div>
-</br>
-
-<h2>RIS Importer</h2>
 
 <div><form enctype="multipart/form-data" action="" method="post">
 
@@ -44,16 +51,28 @@ function ris_importer_page() {
 
 		<fieldset>
 			<div>
-				<input type="radio" name="overwrite" value="true" checked>
+				<input type="radio" name="overwrite" value="true" id="overwrite" checked>
 				<label for="overwrite">Overwrite existing bibliography</label>
 			</div>
 			<div>
-				<input type="radio" name="overwrite" value="false">
+				<input type="radio" name="overwrite" value="false" id="append">
 				<label for="append">Append to existing bibliography</label>
 			</div>
 		</fieldset>
 
-</fieldset>
+</br>
+		<fieldset>
+			<legend><b>Import optional fields</b></legend>
+			<div>
+						 <input type="checkbox" name="keywords" id="importkeywords" checked/>
+						 <label for="importkeywords">Keywords</label>
+					 </div>
+					 <div>
+						 <input type="checkbox" name="notes" id="importnotes" checked/>
+						 <label for="importnotes">Notes</label>
+				 </div>
+
+		</fieldset>
 
 		<p><input type="submit" name="import-submit" id="submit" class="button button-primary" value="Import Now" /></p>
 
@@ -83,10 +102,15 @@ function ris_importer_page() {
 			echo "<h4>Deleted ". count($bibentries) . " existing bibliography entries.</h4>";
 		}
 
+		$opts = new ImportOptions();
+		if (!$_POST['notes']) $opts->notes = false;
+		if (!$_POST['keywords']) $opts->keywords = false;
+
 		require( plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/reflib.php');
 		$lib = new RefLib();
 		$lib->SetContentsFile($_FILES['risupload']['tmp_name']);
-		import_reflib_ris($lib->refs);
+
+		import_reflib_ris($lib->refs, $opts);
 
 }
 }
