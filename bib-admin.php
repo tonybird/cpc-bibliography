@@ -65,6 +65,13 @@ function add_bib_fields_meta_box() {
 }
 // Show bibliography field editing form
 function show_bib_fields_meta_box() {
+  // global $post;
+  // $myvals = get_post_meta($post->ID);
+  //
+  // foreach($myvals as $key=>$val)
+  // {
+  //     echo $key . ' : ' . $val[0] . '<br/>';
+  // }
 
   // Import ID, title, and description for text fields and text areas
   include( plugin_dir_path( __FILE__ ) . 'bib-fields.php');
