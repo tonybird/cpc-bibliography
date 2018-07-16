@@ -13,6 +13,8 @@ include( plugin_dir_path( __FILE__ ) . 'reflib-test.php');
 //include( plugin_dir_path( __FILE__ ) . 'citation-on-publish.php');
 include( plugin_dir_path( __FILE__ ) . 'importer-page.php');
 
+include( plugin_dir_path( __FILE__ ) . 'bib-class.php');
+
 add_action( 'init', 'bibliography_post_type', 0 );
 function bibliography_post_type() {
   $biblabels = array(
