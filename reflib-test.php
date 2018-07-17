@@ -39,6 +39,7 @@ function import_reflib_ris($lib, $opts) {
 
     $new_bib = array(
       'post_title'    =>  wp_strip_all_tags($fields['title']),
+      'post_name'     =>  $fields['id'],
       'post_status'   => 'publish',
       'post_type'     => 'bib'
     );

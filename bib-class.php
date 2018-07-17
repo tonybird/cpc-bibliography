@@ -40,6 +40,7 @@ class Bibliography_Entry
   public function get_bib_post_data() {
     return array(
       'post_title' => $this->title,
+      'post_name' => $this->id,
       'post_type' => 'bib',
       'post_status' => 'publish',
       'meta_input' => $this->get_bib_post_meta()
