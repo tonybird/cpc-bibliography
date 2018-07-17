@@ -68,18 +68,9 @@ $meta = get_post_meta( $post->ID, 'bib_fields', true );
 				$tofile = $newlib->GetContents(); // Output file to the browser
 				$tofile = str_replace("\\n", '', $tofile);
 
-				//.RIS Filename
-				if(strlen($post->title) > 25) {
-					$filename = substr($post->title, 0, strpos($post->title, ' ', 25));
-				} else {
-					$filename = $post->title;
-				}
-				$filename = str_replace(' ', '-', $filename); // Replaces all spaces with hyphens.
-				$filename =  preg_replace('/[^A-Za-z0-9\-]/', '', $filename); // Removes special chars.
-
 				?>
 				<form action="http://wp-test.cpc.unc.edu/tonybird/wp-content/plugins/cpc-bibliography/download-ris.php" method="post">
-					<input type="hidden" name="filename" value="<?php echo $filename; ?>">
+					<input type="hidden" name="filename" value="<?php echo $post->id; ?>">
 					<input type="hidden" name="tofile" value="<?php echo $tofile; ?>">
 				<input type="submit" name="submit" id="submit" value="Download as .RIS" />
 				</form>
