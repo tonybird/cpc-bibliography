@@ -21,21 +21,25 @@ class RefLib_ris {
 	*/
 	var $_mapHash = array(
 
-		//
 		'AB' => 'abstract',
 		'T2' => 'secondary-title',
+		'T3' => 'series-title',
 		'CY' => 'city',
 		'PB' => 'publisher',
+		'ET' => 'edition',
+		'ID' => 'id',
+		'C2' => 'pmcid',
+		'C6' => 'nihmsid',
+		'M1' => 'misc',
+
 		//Fields above this line were added for CPC use
 
 		'CA' => 'caption',
 		'J2' => 'title-secondary',
 		'C1' => 'custom1',
-		'C2' => 'custom2',
 		'C3' => 'custom3',
 		'C4' => 'custom4',
 		'C5' => 'custom5',
-		'C6' => 'custom6',
 		'C7' => 'custom7',
 		'C8' => 'custom8',
 		'LA' => 'language',
@@ -44,8 +48,8 @@ class RefLib_ris {
 		'SE' => 'section',
 		'SN' => 'isbn',
 		'ST' => 'title-short',
-		'T1' => 'title', // The spec is publidshed in san-serif; T[ONE] is correct
-		'TI' => 'title', // The spec is publidshed in san-serif
+		'T1' => 'title', // The spec is published in san-serif; T[ONE] is correct
+		'TI' => 'title', // The spec is published in san-serif
 		'VL' => 'volume',
 		'PY' => 'year',
 		'IS' => 'number' // Issue #
@@ -57,10 +61,12 @@ class RefLib_ris {
 	* @var array
 	*/
 	var $_mapHashArray = array(
-		// Prefered keys
+		// Preferred keys
 		'AU' => 'authors',
-		'DO' => 'urls',
 		'A2' => 'editors',
+		'A3' => 'series-authors',
+		'DO' => 'urls',
+		'KW' => 'keywords',
 
 		// Regular keys
 		'UR' => 'urls',
