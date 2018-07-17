@@ -38,14 +38,6 @@ function get_field($str, $id=NULL) {
 //  return $meta[$str];
 }
 
-function set_field($key, $val) {
-  global $post;
-  //set_post_meta($post->ID, $key, $val);
-  $bibfieldsarr = get_post_meta( $post->ID, 'bib_fields', true );
-  $bibfieldsarr[$key] = $val;
-  set_post_meta ($post->ID, 'bib_fields', $bibfieldsarr);
-}
-
 // Show citation in meta box
 function show_citation_meta_box() {
   echo get_field("citation");
@@ -64,56 +56,53 @@ function add_bib_fields_meta_box() {
   );
 }
 // Show bibliography field editing form
-function show_bib_fields_meta_box() {
-  // global $post;
-  // $myvals = get_post_meta($post->ID);
-  //
-  // foreach($myvals as $key=>$val)
-  // {
-  //     echo $key . ' : ' . $val[0] . '<br/>';
-  // }
 
-  // Import ID, title, and description for text fields and text areas
+function show_bib_fields_meta_box() {
   include( plugin_dir_path( __FILE__ ) . 'bib-fields.php');
 
-   ?>
+global $post;
+ // Use nonce for verification
+echo '<input type="hidden" name="bib_meta_box_nonce" value="'.wp_create_nonce(basename(__FILE__)).'" />';
 
-  <input type="hidden" name="bib_meta_box_nonce" value="<?php echo wp_create_nonce( basename(__FILE__) ); ?>">
-
-  <p><label for="reference-type">Reference Type</label></br>
-    <i>Select the bibliographic reference type for this entry such as journal article, book, etc.</i></br>
-    <select name="type" id="type">
-      <?php
-      	foreach($referencetypes as $value => $title) {
-          echo($title);
-          echo "<option value='" . $value . "'";
-          selected( trim(get_field('type')), $value);
-          echo ">" . $title ." (".$value.")</option>";
-        }
-        echo "</select></p>";
-
-      foreach($textareas as $t) {
-
-        if (is_array(get_field($t['id']))) {
-          $contents = implode("\n",get_field($t['id']));
-        } else {
-          $contents = get_field($t['id']);
-        }
-        echo "<p><label for='".$t['id']."'>".$t['title']."</label></br>
-        <i>".$t['desc']."</i>
-        <textarea name='".$t['id']."' id='".$t['id']."' rows='4'>".$contents."</textarea>
-        </p>";
-      }
-
-      foreach($textfields as $t) {
-        echo "<p><label for='".$t['id']."'>".$t['title']."</label></br>";
-        if ($t['desc'] != "") {
-          echo "<i>".$t['desc']."</i></br>";
-        }
-        echo "<input type='text' name='".$t['id']."' id='".$t['id']."' class='regular-text' value='".get_field($t['id'])."'>
-        </p>";
-      }
-    }
+     // Begin the field table and loop
+     echo '<table class="form-table">';
+     foreach ($bibliography_meta_fields as $field) {
+       // get value of this field if it exists for this post
+       $meta = get_post_meta($post->ID, $field['id'], true);
+       if (is_array($meta)) {
+         $meta = implode("\n",$meta);
+       }
+         echo '<tr>
+         <th><label for="'.$field['id'].'">'.$field['label'].'</label></th><td>';
+         switch($field['type']) {
+           // text
+           case 'text':
+            echo '<input type="text" name="'.$field['id'].'" id="'.$field['id'].'" value="'.$meta.'" size="30" />
+            <br /><span class="description">'.$field['desc'].'</span>';
+              break;
+           // textarea
+           case 'textarea':
+            echo '<textarea name="'.$field['id'].'" id="'.$field['id'].'" cols="60" rows="4">'.$meta.'</textarea>
+                  <br /><span class="description">'.$field['desc'].'</span>';
+                    break;
+           // checkbox
+            case 'checkbox':
+            echo '<input type="checkbox" name="'.$field['id'].'" id="'.$field['id'].'" ',$meta ? ' checked="checked"' : '','/>
+                  <label for="'.$field['id'].'">'.$field['desc'].'</label>';
+                    break;
+           // select
+           case 'select':
+            echo '<select name="'.$field['id'].'" id="'.$field['id'].'">';
+              foreach ($field['options'] as $option) {
+                echo '<option', $meta == $option['value'] ? ' selected="selected"' : '', ' value="'.$option['value'].'">'.$option['label'].'</option>';
+              }
+            echo '</select><br /><span class="description">'.$field['desc'].'</span>';
+              break;
+          } //end switch
+        echo '</td></tr>';
+    } // end foreach
+ echo '</table>';
+}
 
   add_action( 'admin_print_styles-post-new.php', 'bibliography_admin_style', 11 );
   add_action( 'admin_print_styles-post.php', 'bibliography_admin_style', 11 );
@@ -126,67 +115,52 @@ function bibliography_admin_style() {
 }
 
 // Update bibliography fields in database
-    function save_bib_fields_meta( $post_id ) {
+function save_bib_fields_meta($post_id) {
+  include( plugin_dir_path( __FILE__ ) . 'bib-fields.php');
 
-      if ('bib' !== get_post_type($post_id) ) {
+    // verify nonce
+    if (!wp_verify_nonce($_POST['bib_meta_box_nonce'], basename(__FILE__)))
         return $post_id;
-      }
-
-      // verify nonce
-      if ( isset($_POST['bib_meta_box_nonce'])
-      && !wp_verify_nonce( $_POST['bib_meta_box_nonce'], basename(__FILE__) ) ) {
+    // check autosave
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
         return $post_id;
-      }
-      // check autosave
-      if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-        return $post_id;
-      }
-      // check permissions
-      if (isset($_POST['post_type'])) {
-        if ( 'page' === $_POST['post_type'] ) {
-          if ( !current_user_can( 'edit_page', $post_id ) ) {
+    // check permissions
+    if ('page' == $_POST['post_type']) {
+        if (!current_user_can('edit_page', $post_id))
             return $post_id;
-          } elseif ( !current_user_can( 'edit_post', $post_id ) ) {
+        } elseif (!current_user_can('edit_post', $post_id)) {
             return $post_id;
-          }
-        }
-      }
-
-      include( plugin_dir_path( __FILE__ ) . 'bib-fields.php');
-
-      update_post_meta($post_id, 'type', $_POST['type']);
-      foreach ($textfields as $t) {
-        if (isset($_POST[$t['id']])) {
-          update_post_meta($post_id, $t['id'], $_POST[$t['id']]);
-        }
-      }
-      foreach ($textareas as $t) {
-        if (isset($_POST[$t['id']])) {
-          if ($t['id'] == 'authors' || $t['id'] == 'editors' || $t['id'] == 'keywords' || $t['id'] == 'series-authors') {
-            $textareaarray = explode("\n", str_replace("\r", "", $_POST[$t['id']]));
-            update_post_meta($post_id, $t['id'], $textareaarray);
-          } else {
-            update_post_meta($post_id, $t['id'], $_POST[$t['id']]);
-          }
-        }
-      }
-
-        //generate citation from bibliography fields
-      //  include( plugin_dir_path( __FILE__ ) . 'generate-citation.php');
-    //    generate_citation();
-
-      //  include( plugin_dir_path( __FILE__ ) . 'citation-from-id.php');
-        update_post_meta($post_id, "citation", citation_from_id($post_id));
-
-
-
     }
+
+    // loop through fields and save the data
+    $b = new Bibliography_Entry();
+    $b->set_bib_field("title", get_the_title());
+
+    foreach ($bibliography_meta_fields as $field) {
+        $old = get_post_meta($post_id, $field['id'], true);
+        switch ($field['id']) {
+          case "authors":
+          case "editors":
+          case "keywords":
+          case "series-authors":
+            $new = explode("\n", str_replace("\r", "", $_POST[$field['id']]));
+            break;
+          default:
+            $new = $_POST[$field['id']];
+        }
+        $b->set_bib_field($field['id'],$new);
+
+        if ($new && $new != $old) {
+            update_post_meta($post_id, $field['id'], $new);
+        } elseif ('' == $new && $old) {
+            delete_post_meta($post_id, $field['id'], $old);
+        }
+    } // end foreach
+    print_r($b->get_bib_post_meta());
+    update_post_meta($post_id, "citation", $b->generate_citation());
+}
+
     add_action( 'save_post', 'save_bib_fields_meta' );
-    // add_action( 'updated_bib_meta', 'prepare_for_search', 10, 4);
-    //
-    // prepare_for_search($meta_id, $object_id, $meta_key, $_meta_value) {
-    //   update_post_meta($object_id, 'authorstring', implode(get_post_meta($object_id, 'authors', true)));
-    // }
 
 
  ?>

@@ -14,139 +14,190 @@ $referencetypes = array(
   "thes" => "Thesis / Dissertation"
 );
 
-$textareas = array
-//Multi-line text areas with optional description
-(
-  array(
-    "id" => "abstract",
-    "title" => "Abstract",
-    "desc" => "",
-  ),
-  array(
-    "id" => "keywords",
-    "title" => "Keyword(s)",
-    "desc" => "Enter any keywords for this reference entry, one per line.",
-  ),
-  array(
-    "id" => "notes",
-    "title" => "Notes",
-    "desc" => "Please enter any other relevant information",
-  ),
-  array(
-    "id" => "authors",
-    "title" => "Author(s)",
-    "desc" => "Enter the authors, one per line, in the format: Lastname,Firstname,Suffix</br>For example: Phillips,Albert,Jr.",
-  ),
-  array(
-    "id" => "editors",
-    "title" => "Editor(s)",
-    "desc" => "Enter any editors, one per line, in the format: Lastname,Firstname,Suffix</br>For example: Phillips,Albert,Jr.",
-  ),
-  array(
-    "id" => "series-authors",
-    "title" => "Series Author(s)",
-    "desc" => "Please enter any series authors, one per line, in the same format as the primary authors field.",
-  )
-);
-
-$textfields = array
-//Single-line text fields with optional descriptions
-(
-  array(
-    "id" => "secondary-title",
-    "title" => "Secondary Title",
-    "desc" => "Enter a secondary title for this entry such as the book title for a book chapter, or a journal/periodical/magazine name for an article",
-  ),
-  array(
-    "id" => "url",
-    "title" => "URL",
-    "desc" => "Enter a URL for this reference entry. URLs without http:// will be treated as DOIs",
-  ),
-  array(
-    "id" => "series-title",
-    "title" => "Series Title",
-    "desc" => "Enter the book series title",
-  ),
-  array(
-    "id" => "year",
-    "title" => "Year Published",
-    "desc" => "Please enter the year published in the following format: YYYY or Forthcoming or In Press.",
-  ),
-  array(
-    "id" => "date-published",
-    "title" => "Date Published",
-    "desc" => "Please enter any additional date information in the following format: YYYY/MM/DD/Other as in 2010/// or 2010/04/01/ or 2010///Spring or ///Forthcoming.",
-  ),
-  array(
-    "id" => "volume",
-    "title" => "Volume Number",
-    "desc" => "Enter the journal volume",
-  ),
-  array(
-    "id" => "number",
-    "title" => "Issue Number",
-    "desc" => "",
-  ),
-  array(
-    "id" => "pages",
-    "title" => "Page Numbers",
-    "desc" => "",
-  ),
-  // array(
-  //   "id" => "end-page",
-  //   "title" => "End Page Number",
-  //   "desc" => "",
-  // ),
-  array(
-    "id" => "edition",
-    "title" => "Edition",
-    "desc" => "",
-  ),
-  array(
-    "id" => "series-volume",
-    "title" => "Series Volume",
-    "desc" => "Enter the book series volume",
-  ),
-  array(
-    "id" => "publisher",
-    "title" => "Publisher",
-    "desc" => "Enter the name of the publisher",
-  ),
-  array(
-    "id" => "city",
-    "title" => "City of Publication",
-    "desc" => "Enter the location of the publisher",
-  ),
-  array(
-    "id" => "isbn",
-    "title" => "ISSN/ISBN",
-    "desc" => "",
-  ),
-  array(
-    "id" => "doi",
-    "title" => "DOI",
-    "desc" => "DOI reference number",
-  ),
-  array(
-    "id" => "pmcid",
-    "title" => "PMCID",
-    "desc" => "",
-  ),
-  array(
-    "id" => "nihmsid",
-    "title" => "NIHMSID",
-    "desc" => "",
-  ),
-  array(
-    "id" => "reference-id",
-    "title" => "Reference ID",
-    "desc" => "External reference number which can consist of any alphanumeric characters",
-  ),
-  array(
-    "id" => "misc",
-    "title" => "Miscellaneous",
-    "desc" => "Information such as the type of the work",
-  )
+// Field Array
+$bibliography_meta_fields = array(
+    array(
+        'label'=> 'Abstract',
+        'desc'  => '',
+        'id'    => 'abstract',
+        'type'  => 'textarea'
+    ),
+    array(
+        'label'=> 'URL',
+        'desc'  => 'Enter any URLs for this reference entry, one per line.',
+        'id'    => 'url',
+        'type'  => 'textarea'
+    ),
+    array(
+        'label'=> 'Keyword(s)',
+        'desc'  => 'Enter any keywords for this reference entry, one per line.',
+        'id'    => 'keywords',
+        'type'  => 'textarea'
+    ),
+    array(
+        'label'=> 'Notes',
+        'desc'  => 'Please enter any other relevant information',
+        'id'    => 'notes',
+        'type'  => 'textarea'
+    ),
+    array(
+        'label'=> 'Reference Type',
+        'desc'  => 'Select the bibliographic reference type for this entry such as journal article, book, etc.',
+        'id'    => 'type',
+        'type'  => 'select',
+        'options' => array (
+            'book' => array (
+                'label' => 'Book',
+                'value' => 'book'
+            ),
+            'chap' => array (
+                'label' => 'Book Chapter',
+                'value' => 'chap'
+            ),
+            'conf' => array (
+                'label' => 'Conference Proceeding / Presentation',
+                'value' => 'conf'
+            ),
+            'echap' => array (
+                'label' => 'Electronic Book Section',
+                'value' => 'echap'
+            ),
+            'edbook' => array (
+                'label' => 'Edited Book',
+                'value' => 'edbook'
+            ),
+            'elec' => array (
+                'label' => 'Electronic Citation',
+                'value' => 'elec'
+            ),
+            'gen' => array (
+                'label' => 'Generic / Unpublished',
+                'value' => 'gen'
+            ),
+            'jour' => array (
+                'label' => 'Journal Article',
+                'value' => 'jour'
+            ),
+            'mgzn' => array (
+                'label' => 'Magazine Article',
+                'value' => 'mgzn'
+            ),
+            'rprt' => array (
+                'label' => 'Report / Working Paper',
+                'value' => 'rprt'
+            ),
+            'ser' => array (
+                'label' => 'Serial (Book, Monograph)',
+                'value' => 'ser'
+            ),
+            'thes' => array (
+                'label' => 'Thesis / Dissertation',
+                'value' => 'thes'
+            )
+        )
+    ),
+    array(
+        'label'=> 'Secondary Title',
+        'desc'  => 'Enter a secondary title for this entry such as the book title for a book chapter',
+        'id'    => 'secondary-title',
+        'type'  => 'text'
+    ),
+    array(
+        'label'=> 'Series Title',
+        'desc'  => 'Enter the book series title',
+        'id'    => 'series',
+        'type'  => 'text'
+    ),
+    array(
+        'label'=> 'Author(s)',
+        'desc'  => 'Enter the authors, one per line, in the format: Lastname,Firstname,Suffix</br>For example: Phillips,Albert,Jr.',
+        'id'    => 'authors',
+        'type'  => 'textarea'
+    ),
+    array(
+        'label'=> 'Editor(s)',
+        'desc'  => 'Enter any editors, one per line, in the format: Lastname,Firstname,Suffix</br>For example: Phillips,Albert,Jr.',
+        'id'    => 'editors',
+        'type'  => 'textarea'
+    ),
+    array(
+        'label'=> 'Series Author(s)',
+        'desc'  => 'Please enter any series authors, one per line, in the same format as the primary authors field.',
+        'id'    => 'series-authors',
+        'type'  => 'textarea'
+    ),
+    array(
+        'label'=> 'Year Published',
+        'desc'  => 'Please enter the year published in the following format: YYYY or Forthcoming or In Press.',
+        'id'    => 'year',
+        'type'  => 'text'
+    ),
+    array(
+        'label'=> 'Volume Number',
+        'desc'  => 'Enter the journal volume',
+        'id'    => 'volume',
+        'type'  => 'text'
+    ),
+    array(
+        'label'=> 'Issue Number',
+        'desc'  => '',
+        'id'    => 'number',
+        'type'  => 'text'
+    ),
+    array(
+        'label'=> 'Page Numbers',
+        'desc'  => '',
+        'id'    => 'pages',
+        'type'  => 'text'
+    ),
+    array(
+        'label'=> 'Edition',
+        'desc'  => '',
+        'id'    => 'edition',
+        'type'  => 'text'
+    ),
+    array(
+        'label'=> 'Publisher',
+        'desc'  => 'Enter the name of the publisher',
+        'id'    => 'publisher',
+        'type'  => 'text'
+    ),
+    array(
+        'label'=> 'City of Publication',
+        'desc'  => 'Enter the location of the publisher',
+        'id'    => 'city',
+        'type'  => 'text'
+    ),
+    array(
+        'label'=> 'ISSN/ISBN',
+        'desc'  => '',
+        'id'    => 'isbn',
+        'type'  => 'text'
+    ),
+    array(
+        'label'=> 'PMCID',
+        'desc'  => '',
+        'id'    => 'pmcid',
+        'type'  => 'text'
+    ),
+    array(
+        'label'=> 'NIHMSID',
+        'desc'  => '',
+        'id'    => 'nihmsid',
+        'type'  => 'text'
+    ),
+    array(
+        'label'=> 'Reference ID',
+        'desc'  => 'External reference number which can consist of any alphanumeric characters',
+        'id'    => 'id',
+        'type'  => 'text'
+    ),
+    array(
+        'label'=> 'Miscellaneous',
+        'desc'  => 'Information such as the type of the work',
+        'id'    => 'misc',
+        'type'  => 'text'
+    )
 );
 
 $frontendfields = array(
@@ -176,7 +227,7 @@ $frontendfields = array(
   "DOI"=>"doi",
   "PMCID"=>"pmcid",
   "NIHMSID"=>"nihmsid",
-  "Reference ID"=>"reference-id",
+  "Reference ID"=>"id",
   "Miscellaneous"=>"misc"
 );
 ?>

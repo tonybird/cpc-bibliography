@@ -72,6 +72,7 @@ class Bibliography_Entry
       }
       $authorlist = $authorlist . "& " . $author_arr[count($author_arr)-1];
     }
+    // $authorlist = "AUTHORS GO HERE: ".$this->authors;
 
     //generate editor array and format editor list for citation
     $editor_arr = $this->editors;
@@ -100,7 +101,7 @@ class Bibliography_Entry
     //add type-specific citation content
     switch($this->type) {
       case "jour":
-      $citation = "{$citation} <i>".$this->secondarytitle;
+      $citation = "{$citation} <i>".$this->{'secondary-title'};
       if ($this->volume) $citation = "{$citation}, ".$this->volume;
       if ($this->number) $citation = "{$citation}(".$this->number.")";
       $citation = $citation . '</i>';
@@ -115,8 +116,8 @@ class Bibliography_Entry
       } else if (count($editor_arr) == 1){
         $editors = "{$editorlist} (Ed.)";
       }
-      if ($this->secondarytitle) {
-        $citation = "{$citation} In {$editors}, <i>".$this->secondarytitle."</i>";
+      if ($this->{'secondary-title'}) {
+        $citation = "{$citation} In {$editors}, <i>".$this->{'secondary-title'}."</i>";
       } else {
         $citation = "{$citation} In {$editors}";
       }
@@ -129,7 +130,7 @@ class Bibliography_Entry
       break;
       case "conf":
       case "rprt":
-      if ($this->secondarytitle) $citation = "{$citation} ".$this->secondarytitle.".";
+      if ($this->{'secondary-title'}) $citation = "{$citation} ".$this->secondarytitle.".";
       if ($this->city && $this->publisher) $citation = $citation . " " . $this->city .": ".$this->publisher.".";
       else if ($this->city) $citation = $citation . " " . $this->city . ".";
       else if ($this->publisher) $citation = $citation . " " . $this->publisher.".";
