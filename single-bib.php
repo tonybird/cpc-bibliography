@@ -69,8 +69,8 @@ $meta = get_post_meta( $post->ID, 'bib_fields', true );
 				$tofile = str_replace("\\n", '', $tofile);
 
 				?>
-				<form action="http://wp-test.cpc.unc.edu/tonybird/wp-content/plugins/cpc-bibliography/download-ris.php" method="post">
-					<input type="hidden" name="filename" value="<?php echo $post->id; ?>">
+				<form action="http://wp-test.cpc.unc.edu/tonybird/wp-content/plugins/cpc-bibliography/download.php" method="post">
+					<input type="hidden" name="filename" value="<?php echo $post->id.".ris"; ?>">
 					<input type="hidden" name="tofile" value="<?php echo $tofile; ?>">
 				<input type="submit" name="submit" id="submit" value="Download as .RIS" />
 				</form>
