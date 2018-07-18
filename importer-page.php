@@ -7,10 +7,12 @@ class ImportOptions {
 
 add_action('admin_menu', 'add_bib_subpages');
 
+include( plugin_dir_path( __FILE__ ) . 'keyword-search.php');
+
 function add_bib_subpages() {
 add_submenu_page('edit.php?post_type=bib', 'Import RIS File', 'Import RIS File', 'manage_options', 'ris-import', 'ris_importer_page');
+add_submenu_page('edit.php?post_type=bib', 'Keyword Search', 'Keyword Search', 'manage_options', 'keyword-search', 'bib_keyword_search');
 add_submenu_page('edit.php?post_type=bib', 'Bibliography Settings', 'Settings', 'manage_options', 'bib-settings', 'bib_settings_page');
-
 }
 
 function bib_settings_page() {
