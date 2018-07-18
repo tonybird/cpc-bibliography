@@ -91,7 +91,7 @@ function bib_keyword_search() {
       $title_abstract = strtolower($title_abstract);
       $title_abstract = preg_replace("/[^A-Za-z0-9 ]/", " ", $title_abstract);
 
-      $id = get_the_ID();
+      $id = $post->id;
       $articles[$id]['nbr_keywords'] = 0;
       // foreach ($keywords as $keyword) {
       //   $keyword = strtolower($keyword);
