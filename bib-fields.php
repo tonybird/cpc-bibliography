@@ -193,6 +193,18 @@ $bibliography_meta_fields = array(
         'type'  => 'text'
     ),
     array(
+        'label'=> 'Funding Information*',
+        'desc'  => '*May be used by CPC Library, not visible to the public',
+        'id'    => 'funding',
+        'type'  => 'text'
+    ),
+    array(
+        'label'=> 'Affiliation*',
+        'desc'  => '*May be used by CPC Library, not visible to the public',
+        'id'    => 'affiliation',
+        'type'  => 'text'
+    ),
+    array(
         'label'=> 'Miscellaneous',
         'desc'  => 'Information such as the type of the work',
         'id'    => 'misc',

@@ -31,10 +31,11 @@ class RefLib_ris {
 		'C2' => 'pmcid',
 		'C6' => 'nihmsid',
 		'M1' => 'misc',
+		'AD' => 'affiliation',
+		'CA' => 'funding',
 
 		//Fields above this line were added for CPC use
 
-		'CA' => 'caption',
 		'J2' => 'title-secondary',
 		'C1' => 'custom1',
 		'C3' => 'custom3',
