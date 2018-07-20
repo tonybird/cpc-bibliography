@@ -14,7 +14,11 @@ function bib_keyword_search() {
   if ( ! empty( $_POST['keywords-submit'] ) ) {
     error_log("Starting search");
     $keywords_file = file($_FILES['kwupload']['tmp_name']);
-    $journals_file = file($_FILES['journalupload']['tmp_name']);
+    if (is_uploaded_file($_FILES['journalupload']['tmp_name'])) {
+      $journals_file = file($_FILES['journalupload']['tmp_name']);
+    } else {
+      $journals_file = array();
+    }
 
 
     $articles = array();
@@ -99,9 +103,9 @@ function bib_keyword_search() {
         $articles[$id]['clusters'][$cluster]['count'] = 0;
         $articles[$id]['clusters'][$cluster]['keywords'] = array();
         foreach (array_keys($clusters[$cluster]['keywords']) as $keyword) {
-          $keyword = strtolower($keyword);
-          $keyword = preg_quote($keyword, "/");
-          if (preg_match("/\b$keyword\b/", $title_abstract)) {
+          $kw = strtolower($keyword);
+          $kw = preg_quote($kw, "/");
+          if (preg_match("/\b$kw\b/", $title_abstract)) {
             $articles[$id]['nbr_keywords']++;
             $articles[$id]['clusters'][$cluster]['count']++;
             $articles[$id]['clusters'][$cluster]['keywords'][$keyword] = 1;
@@ -151,6 +155,13 @@ function bib_keyword_search() {
     wp_reset_query();
     error_log("Ending search");
 
+
+    // echo "<p>CLUSTERS:</p><pre>";
+    // print_r($clusters);
+    // echo "</pre><p>ARTICLES</p><pre>";
+    // print_r($articles);
+    // echo "</pre>";
+
   //
   // Output to CSV
   //
@@ -193,25 +204,110 @@ function bib_keyword_search() {
     "nbr_distinct_keywords"
   );
 
+  ksort($clusters);
+  foreach ($clusters as $key => $cluster) {
+
+    preg_match_all("/\[(.*?)\]/", $key, $matches);
+    $varname = $matches[1][0];
+    if ($varname == "") $varname = $key;
+
+    $header[] = "cluster_{$varname}_found_keywords";
+    $header[] = "nbr_keywords_in_cluster_$varname";
+
+    ksort($cluster['keywords']);
+    foreach ($cluster['keywords'] as $key => $val) {
+      $k = strtolower($key);
+      $k = preg_replace("/[^A-Za-z0-9 ]/", " ", $k);
+      $k = preg_replace("/ /", "_", $k);
+
+      $var = "has_{$varname}_kw_{$k}";
+      $var = substr($var, 0, 32);
+      $header[] = $var;
+    }
+  }
+
+    //sort articles by title!
+    array_multisort(array_column($articles, 'title'), SORT_ASC,$articles);
+
+
+
 
     foreach ($articles as $article) {
       $row = array();
       $row[0] = $article['endnote_id'];
       $row[1] = $article['endnote_type'];
-      $row[2] = $article['title'];
-      if (isset($article['authors'])) $row[3] = $article['authors'];
-      if (isset($article['author1'])) $row[4] = $article['author1'];
-      if (isset($article['author2'])) $row[5] = $article['author2'];
-      if (isset($article['author3'])) $row[6] = $article['author3'];
-      if (isset($article['author4'])) $row[7] = $article['author4'];
-      if (isset($article['author5'])) $row[8] = $article['author5'];
-      if (isset($article['author6'])) $row[9] = $article['author6'];
-      if (isset($article['author7'])) $row[10] = $article['author7'];
-      if (isset($article['author8'])) $row[11] = $article['author8'];
-      if (isset($article['author9'])) $row[12] = $article['author9'];
-      if (isset($article['author10'])) $row[13] = $article['author10'];
-      if (isset($article['author_et_al'])) $row[14] = $article['author_et_al']; 
+      $row[2] = conv_text($article['title']);
+      $row[3] = (isset($article['authors'])) ? conv_text($article['authors']) : "";
+      $row[4] = (isset($article['author1'])) ? conv_text($article['author1']) : "";
+      $row[5] = (isset($article['author2'])) ? conv_text($article['author2']) : "";
+      $row[6] = (isset($article['author3'])) ? conv_text($article['author3']) : "";
+      $row[7] = (isset($article['author4'])) ? conv_text($article['author4']) : "";
+      $row[8] = (isset($article['author5'])) ? conv_text($article['author5']) : "";
+      $row[9] = (isset($article['author6'])) ? conv_text($article['author6']) : "";
+      $row[10] = (isset($article['author7'])) ? conv_text($article['author7']) : "";
+      $row[11] = (isset($article['author8'])) ? conv_text($article['author8']) : "";
+      $row[12] = (isset($article['author9'])) ? conv_text($article['author9']) : "";
+      $row[13] = (isset($article['author10'])) ? conv_text($article['author10']) : "";
+      $row[14] = (isset($article['author_et_al'])) ? conv_text($article['author_et_al']) : "";
+      $row[15] = $article['fellow'];
+      $row[16] = $article['tp'];
+      $row[17] = $article['gra'];
+      $row[18] = $article['staff'];
+      $row[19] = $article['year'];
+      if (isset($article['abstract'])) $row[20] = conv_text($article['abstract']);
+      $row[21] = $article['journal'];
+      $row[22] = $article['has_journal'];
+      $row[23] = $article['funding_info'];
+      $row[24] = $article['p2c'];
+      $row[25] = $article['t32'];
+      $row[26] = $article['r24'];
+      $row[27] = $article['nbr_keywords'];
 
+      ksort($article['clusters']);
+      foreach ($article['clusters'] as $key => $cluster) {
+
+        // cluster_XXXX_found_keywords
+        $k = "";
+        foreach ($cluster['keywords'] as $keyword => $value) {
+          ksort($cluster['keywords']);
+          if ($value>0) {
+            if ($k == "") {
+              $k = $keyword;
+            } else {
+              $k = "$k; $keyword";
+            }
+          }
+        }
+        $row[] = $k;
+
+        // nbr_keywords_in_cluster_XXXX
+        $c = 0;
+        foreach ($cluster['keywords'] as $keyword => $value) {
+          if ($value>0) $c++;
+        }
+        $row[] = $c;
+
+        // individual has_XXXX_kw_YYYY booleans
+        foreach ($cluster['keywords'] as $keyword => $value) {
+          if ($value>0) {
+            $row[] = 1;
+          } else {
+            $row[] = 0;
+          }
+        }
+
+      }
+
+
+      //
+      //         # individual has_XXXX_kw_XXXX booleans
+      //         for keyword in sorted(clusters[cluster]['keywords'].keys()):
+      //             if articles[id]['clusters'][cluster]['keywords'][keyword] > 0:
+      //                 row.append(1)
+      //             else:
+      //                 row.append(0)
+      //
+      //     writer.writerow(row)
 
       $rows[] = $row;
     }
@@ -222,6 +318,7 @@ function bib_keyword_search() {
      fputcsv($fp, $line);
    }
    fclose($fp);
+
   ?>
 
   <form action="" method="post"><input type="hidden" name="download_csv" value="true">
@@ -241,6 +338,11 @@ function download_csv() {
     readfile("temp_keyword_analysis.csv");
     die;
   }
+}
+
+function conv_text($text) {
+  // error_log("Converting string: ".$text);
+  return iconv("UTF-8","Windows-1252",$text);
 }
 
 ?>
