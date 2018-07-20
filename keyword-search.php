@@ -257,10 +257,14 @@ function bib_keyword_search() {
       if (isset($article['abstract'])) $row[20] = conv_text($article['abstract']);
       $row[21] = $article['journal'];
       $row[22] = $article['has_journal'];
-      $row[23] = $article['funding_info'];
-      $row[24] = $article['p2c'];
-      $row[25] = $article['t32'];
-      $row[26] = $article['r24'];
+      $row[23] = ($article['funding_info'] !== "") ? $article['funding_info'] : "";
+      $row[24] = ($article['funding_info'] !== "") ? $article['p2c'] : "";
+      $row[25] = ($article['funding_info'] !== "") ? $article['t32'] : "";
+      $row[26] = ($article['funding_info'] !== "") ? $article['r24'] : "";
+
+      // $row[24] = $article['p2c'];
+      // $row[25] = $article['t32'];
+      // $row[26] = $article['r24'];
       $row[27] = $article['nbr_keywords'];
 
       ksort($article['clusters']);
