@@ -1,0 +1,224 @@
+TY  - JOUR
+AB  - Objectives. We examined lengths of hospital stay among individuals categorized according to weight status.
+
+Methods. We used data from the First National Health and Nutrition Examination Survey Epidemiologic Followup Survey to estimate length-of-stay differences.
+
+Results. Individuals with body mass indexes (BMIs) of 35 kg/m2 or above, those with BMIs of 30 to 34 kg/m2, and those with BMIs of 25 to 29 kg/m2 had crude length-of-stay rates greater than those of normal-weight individuals. Association between BMI and length of stay varied over time.
+
+Conclusions. Obese individuals experience longer hospital stays than normal-weight individuals.
+AD  - 20040521/LL from CV//STATV-LL //2004R24pubs //annualreview2004// proofed // poprel
+AU  - Zizza, Claire A.
+AU  - Herring, Amy H.
+AU  - Stevens, June
+AU  - Popkin, Barry M.
+C2  - PMC1448498
+CN  - 200409
+DA  - 2004
+IS  - 9
+KW  - D
+H
+LB  - 23920
+PY  - 2004
+SP  - 1587-91
+ST  - Length of Hospital Stays among Obese Individuals
+T2  - American Journal of Public Health
+TI  - Length of Hospital Stays among Obese Individuals
+TT  - Has PMCID.
+UR  - http://dx.doi.org/10.2105/AJPH.94.9.1587
+VL  - 94
+ID  - 2376
+ER  -
+
+
+TY  - JOUR
+AB  - Purpose
+To validate a commercial database of community-level physical activity facilities that can be used in future research examining associations between access to physical activity facilities and individual-level physical activity and obesity.
+
+Methods
+Physical activity facility characteristics and locations obtained from a commercial database were compared to a field census conducted in 80 census block groups within two U.S. communities. Agreement statistics, agreement of administratively defined neighborhoods, and distance between locations were used to quantify count, attribute, and positional error.
+
+Results
+There was moderate agreement (concordance: nonurban: 0.39; urban: 0.46) of presence of any physical activity facility and poor to moderate agreement (? range: 0.14 to 0.76) of physical activity facility type. The mean Euclidean distance between commercial database versus field census locations was 757 and 35 m in the nonurban and urban communities, respectively. However, 94% and 100% of nonurban and urban physical activity facilities, respectively, fell into the same 5-digit ZIP code, dropping to 92% and 98% in the same block group and 71% along the same street.
+
+Conclusions
+Our findings suggest that the commercial database of physical activity facilities may contain appreciable error, but patterns of error suggest that built environment-health associations are likely biased downward.
+AD  - 20080118 // LL from CV // STATV-LL/ // proofed // 2008-9R24pubs // poprel // gralist
+AU  - Boone, Janne E.
+AU  - Gordon-Larsen, Penny
+AU  - Stewart, James D.
+AU  - Popkin, Barry M.
+C2  - PMC2430044
+CN  - 200805
+DA  - 2008
+IS  - 5
+KW  - F
+LB  - 35520
+PY  - 2008
+SP  - 371-7
+ST  - Validation of a GIS Facilities Database: Quantification and Implications of Error
+T2  - Annals of Epidemiology
+TI  - Validation of a GIS Facilities Database: Quantification and Implications of Error
+TT  - Has PMCID. accepted 11-14-07. NIHMS49534 from Penny
+UR  - http://dx.doi.org/10.1016/j.annepidem.2007.11.008
+VL  - 18
+ID  - 3332
+ER  -
+
+
+TY  - JOUR
+AB  - PURPOSE: The purpose of this study is to investigate the relationship between individual-level and neighborhood-level socioeconomic status (SES) across the life course and subclinical atherosclerosis.
+
+METHODS: Participants from the Atherosclerosis Risk in Communities Study (n=12,332) were queried about individual-level SES and residential addresses across the life course. Individual-level measures were scored and summed to obtain a summary score (I-CumSES), whereas residential addresses were geocoded and linked to census data to obtain a summary neighborhood z score (N-CumSES) to evaluate the association of SES with intima-media thickness (IMT) and peripheral arterial disease (PAD).
+
+RESULTS: A 1-SD lower I-CumSES was associated with greater mean IMT in each race-sex group and greater odds of PAD in white men (odds ratio [OR], 1.28; 95% confidence interval [CI], 0.99-1.64), white women (OR, 1.18; 95% CI, 1.02-1.36), and black women (OR, 1.33; 95% CI, 1.00-1.76). Compared with the highest tertile of N-CumSES, the lowest tertile was associated with greater mean IMT among whites, but was not associated with PAD for whites or blacks. When I-CumSES and N-CumSES were considered simultaneously, associations remained for only I-CumSES and were attenuated after adjustment for cardiovascular disease (CVD) risk factors.
+
+CONCLUSIONS: Lower cumulative individual-level SES across the life course was associated with a greater burden of subclinical atherosclerosis, and this association was mediated in part by CVD risk factors.
+AD  - 20061011/LL from Pubmed alert // STATV-LL/ // proofed/ // 2007-8R24pubs // poprel
+AU  - Carson, April P.
+AU  - Rose, Kathryn M.
+AU  - Catellier, Diane J.
+AU  - Kaufman, Jay S.
+AU  - Wyatt, Sharon B.
+AU  - Diez-Roux, Ana V.
+AU  - Heiss, Gerardo M.
+CN  - 200704
+DA  - 2007
+IS  - 4
+KW  - C
+E
+LB  - 32260
+PY  - 2007
+SP  - 296-303
+ST  - Cumulative Socioeconomic Status across the Life Course and Subclinical Atherosclerosis
+T2  - Annals of Epidemiology
+TI  - Cumulative Socioeconomic Status across the Life Course and Subclinical Atherosclerosis
+UR  - http://dx.doi.org/10.1016/j.annepidem.2006.07.009
+VL  - 17
+ID  - 3031
+ER  -
+
+
+TY  - JOUR
+AB  - PURPOSE: Racial and gender disparities in out-of-hospital deaths from coronary heart disease (CHD) have been well-documented, yet disparities by neighborhood socioeconomic status (nSES) have been less systematically studied in US population-based surveillance efforts.
+
+METHODS: We examined the association of nSES, classified into tertiles, with 3,743 out-of-hospital fatal CHD events, and a subset of 2,191 events classified as sudden, among persons aged 35 to 74 years in four US communities under surveillance by the Atherosclerosis Risk in Communities (ARIC). Poisson generalized linear mixed models generated age-, race- (white, black) and gender-specific standardized mortality rate ratios and 95% confidence intervals (RR, 95% CI).
+
+RESULTS: Regardless of nSES measure used, inverse associations of nSES with all out-of-hospital fatal CHD and sudden fatal CHD were seen in all race-gender groups. The magnitude of these associations was larger among women than men. Further, among blacks, associations of low nSES (vs. high nSES) were stronger for sudden cardiac deaths (SCD) than for all out-of-hospital fatal CHD.
+
+CONCLUSIONS: Low nSES was associated with an increased risk of out-of-hospital CHD death and SCD. Measures of the neighborhood context are useful tools in population-based surveillance efforts for documenting and monitoring socioeconomic disparities in mortality over time.
+AD  - 20110505 // VH from PubMed alert // STATV-VH // proofed // poprel // 2themes // R24-2012 batch2
+AU  - Foraker, Randi E.
+AU  - Rose, Kathryn M.
+AU  - Kucharska-Newton, Anna M.
+AU  - Ni, Hanyu
+AU  - Suchindran, Chirayath M.
+AU  - Whitsel, Eric A.
+C2  - PMC3132297
+CN  - 201108
+IS  - 8
+KW  - D
+F
+PY  - 2011
+SP  - 580-8
+ST  - Variation in Rates of Fatal Coronary Heart Disease by Neighborhood Socioeconomic Status: The Atherosclerosis Risk in Communities Surveillance (1992–2002)
+T2  - Annals of Epidemiology
+TI  - Variation in Rates of Fatal Coronary Heart Disease by Neighborhood Socioeconomic Status: The Atherosclerosis Risk in Communities Surveillance (1992–2002)
+TT  - Has PMCID.
+UR  - http://dx.doi.org/10.1016/j.annepidem.2011.03.004
+VL  - 21
+ID  - 4904
+ER  -
+
+
+TY  - JOUR
+AB  - Purpose: The purpose of this commentary is to explain how social constructions of black sexuality are relevant to research targeting black sexual behavior and the ostensibly new and race-specific phenomenon known as “the Down Low” (the DL). The term “the DL” is widely used to refer to black men publicly presenting as heterosexual while secretly having sex with other men and presumably spreading human immunodeficiency virus and acquired immune deficiency syndrome (HIV/AIDS) to unsuspecting women.
+
+Methods: We briefly review lay and public health literature from 1998 to 2004 about the DL, describe existing social constructions of black sexuality, discuss two implications for epidemiologic research, and offer recommendations to guide future research.
+
+Results: The lifestyle referenced by the term the DL is neither new nor limited to blacks, and sufficient data linking it to HIV/AIDS disparities currently are lacking. Common perceptions about the DL reflect social constructions of black sexuality as generally excessive, deviant, diseased, and predatory. Research targeting black sexual behavior that ignores these constructions may unwittingly reinforce them.
+
+Conclusions: Unaddressed social constructions of black sexuality have implications for epidemiologic research targeting black sexual behavior. Explicit examination of these concerns is necessary to eliminate fundamental causes of health disparities.
+AD  - 20070129/LL from CV // STATV-LL/ // proofed/ // 2007-8R24pubs // poprel
+AU  - Ford, Chandra L.
+AU  - Whetten, Kathryn D.
+AU  - Hall, Susan A.
+AU  - Kaufman, Jay S.
+AU  - Thrasher, Angela D.
+CN  - 200703
+DA  - 2007
+IS  - 3
+KW  - A
+E
+LB  - 33320
+PY  - 2007
+SP  - 209-16
+ST  - Black Sexuality, Social Construction, and Research Targeting 'The Down Low' ('The DL')
+T2  - Annals of Epidemiology
+TI  - Black Sexuality, Social Construction, and Research Targeting 'The Down Low' ('The DL')
+UR  - http://dx.doi.org/10.1016/j.annepidem.2006.09.006
+VL  - 17
+ID  - 3133
+ER  -
+
+
+TY  - JOUR
+AB  - Purpose: Breast cancer incidence rates are reported to be higher in urban compared with rural areas in the United States. We investigated the relationship between urbanization and breast cancer in North Carolina (1995–1999), and considered hospital characteristics as an explanation.
+
+Methods: We calculated age-adjusted in situ and invasive female breast cancer incidence rates stratified by race, urbanization (Urban Influence Codes), and the presence of a hospital with a cancer registry and cancer program approval in a county.
+
+Results: For white women, incidence rate ratios (IRRs) comparing the most urban with the most rural counties were 1.60 for in situ and 1.18 for invasive cancer. For non-white women, IRRs were 1.27 and 0.99, respectively. IRRs for incidence in registry hospital counties versus those without were all > 1.00 and differences were greater for in situ cancer than invasive. For most strata, urban excesses were attenuated when further stratified by registry hospital status.
+
+Conclusions: For most strata, we observed excess incidence in urban counties, but it appeared to be explained through the urban preponderance of registry hospitals. Counties with these hospitals may have higher incidence because of increased detection. Area hospital characteristics should be considered when evaluating geographic patterns of breast cancer incidence.
+AD  - 20050310/LL from CV// STATV-LL // annualreview2005 // 2005-6R24pubs // proofed // poprel
+AU  - Hall, Susan A.
+AU  - Kaufman, Jay S.
+AU  - Millikan, Robert C.
+AU  - Ricketts, Thomas C.
+AU  - Herman, Dale
+AU  - Savitz, David A.
+CN  - 200511
+DA  - 2005
+IS  - 10
+KW  - E
+F
+LB  - 28710
+PY  - 2005
+SP  - 796-803
+ST  - Urbanization and Breast Cancer Incidence in North Carolina, 1995-1999
+T2  - Annals of Epidemiology
+TI  - Urbanization and Breast Cancer Incidence in North Carolina, 1995-1999
+UR  - http://dx.doi.org/10.1016/j.annepidem.2005.02.006
+VL  - 15
+ID  - 2702
+ER  -
+
+
+TY  - JOUR
+AB  - PURPOSE: To assess the impact of geographic health services factors on the timely diagnosis of autism.
+
+METHODS: Children residing in central North Carolina were identified by records-based surveillance as meeting a standardized case definition for autism. Individual-level geographic access to health services was measured by the density of providers likely to diagnose autism, distance to early intervention service agencies and medical schools, and residence within a Health Professional Shortage Area. We compared the presence of an autism diagnosis by age 8 and timing of first diagnosis across level of accessibility, using Poisson regression and Cox proportional hazards regression and adjusting for family and neighborhood characteristics.
+
+RESULTS: Of 206 identified cases, 23% had no previous documented diagnosis of autism. Most adjusted estimates had confidence limits including the null. Point estimates across analyses suggested that younger age at diagnosis was found for areas with many neurologists and psychiatrists and proximal to a medical school but not areas with many primary care physicians or proximal to early intervention services agencies.
+
+CONCLUSIONS: Further study of the distribution of medical specialists diagnosing autism may suggest interventions to promote the early diagnosis, and initiation of targeted services, for children with autism spectrum disorders.
+AD  - 20110309 // VH from PubMed alert // STATV-VH // proofed // poprel // R24-2011
+AU  - Kalkbrenner, Amy E.
+AU  - Daniels, Julie L.
+AU  - Emch, Michael E.
+AU  - Morrissey, Joseph P.
+AU  - Poole, Charles L.
+AU  - Chen, Jiu-Chiuan
+C2  - PMC3476466
+CN  - 201104
+IS  - 4
+KW  - F
+PY  - 2011
+SP  - 304-10
+ST  - Geographic Access to Health Services and Diagnosis with an Autism Spectrum Disorder
+T2  - Annals of Epidemiology
+TI  - Geographic Access to Health Services and Diagnosis with an Autism Spectrum Disorder
+TT  - Has PMCID. NIHMS263307
+UR  - http://dx.doi.org/10.1016/j.annepidem.2010.11.010
+VL  - 21
+ID  - 4860
+ER  -
