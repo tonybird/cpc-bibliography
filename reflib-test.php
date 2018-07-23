@@ -1,4 +1,10 @@
 <?php
+
+//      Regex for matching entire abstract including paragraph breaks
+//      /(AB  - (.|\n)*?)[A-Z0-9]{2}  -/
+//      Only match when abstract includes more than one paragraph break
+//      /(AB  - (.*[\n]){2,}?)AD  -/
+
 add_shortcode('reflib', 'reflib_test');
 
 function reflib_test() {

@@ -7,9 +7,19 @@ add_shortcode( 'classtest', 'class_test_func');
 function class_test_func() {
   require( plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/reflib.php');
 
+  $str = file_get_contents(plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/tests/data/multiline-abstract.ris');
+  function remove_breaks($matches) {
+  	return preg_replace( "/\r|\n/", " ", $matches[1] )."\nAD  -";
+  }
+  $str = preg_replace_callback ( "/(AB  - (.*[\n]){2,}?)[A-Z]{2}  -/" , "remove_breaks" , $str );
+  echo "<pre>".$str."</pre>";
+  file_put_contents(plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/tests/data/multiline-abstract-output.ris', $str);
+
   $lib = new RefLib();
-  $lib->SetContentsFile(plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/tests/data/cpc-ris.txt');
-  $importlib = array_slice($lib->refs, 1300, 5);
+  // $lib->SetContentsFile($string);
+  $lib->SetContentsFile(plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/tests/data/multiline-abstract-output.ris');
+  // $importlib = array_slice($lib->refs, 1300, 5);
+  $importlib = $lib->refs;
 
   foreach($importlib as $num => $fields) {
     $b = new Bibliography_Entry();

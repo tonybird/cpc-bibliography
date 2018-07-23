@@ -108,6 +108,14 @@ function ris_importer_page() {
 		if (!$_POST['notes']) $opts->notes = false;
 		if (!$_POST['keywords']) $opts->keywords = false;
 
+    // //Fix multiline abstracts
+    // $str = file_get_contents($_FILES['risupload']['tmp_name']);
+    // function remove_breaks($matches) {
+    //   return preg_replace( "/\r|\n/", " ", $matches[1] )."\nAD  -";
+    // }
+    // $str = preg_replace_callback ( "/(AB  - (.*[\n]){2,}?)[A-Z]{2}  -/" , "remove_breaks" , $str );
+    // file_put_contents($_FILES['risupload']['tmp_name'], $str);
+
 		require( plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/reflib.php');
 		$lib = new RefLib();
 		$lib->SetContentsFile($_FILES['risupload']['tmp_name']);
