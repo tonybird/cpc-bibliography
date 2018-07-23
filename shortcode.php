@@ -7,6 +7,48 @@ add_shortcode('bibliography', 'display_entries');
 
 function display_entries() {
 
+$sort_options = array(
+  "aty" => "Author, Title, Year",
+  "ayt" => "Author, Year, Title",
+  "tay" => "Title, Author, Year",
+  "tya" => "Title, Year, Author",
+  "yat" => "Year, Author, Title",
+  "yta" => "Year, Title, Author",
+  "ryat" => "Year (Reversed), Author, Title",
+  "ryta" => "Year (Reversed), Title, Author"
+);
+?>
+<form id="search-sort" method="post">
+  <p>
+  <label for="search">Search: </label>
+  <input type="text" id="search" name="search">
+  <label for="sort">Sort By: </label>
+<select class="category-select" id="sort" name="sort" onchange="change()">
+
+  <?php
+  if ($_POST['sort']=="") $_POST['sort']="ryat";
+foreach ($sort_options as $key =>$value) {
+  echo "<option value='".$key."'";
+  if ($_POST['sort']==$key) echo "selected='selected'";
+  echo ">".$value."</option>";
+}
+?>
+
+</select>
+<button type="submit" form="search-sort">Submit</button>
+</p>
+</form>
+
+
+
+<script>
+function change(){
+    document.getElementById("search-sort").submit();
+}
+</script>
+
+<?php
+
   //the query
 //   $args = array(
 //   'post_type' => 'bib',
@@ -28,6 +70,49 @@ $args = array(
   'posts_per_page'=>-1
 );
 
+$sort_orders = array(
+  "aty" => array(
+    'author_clause' => 'ASC',
+    'title' => 'ASC',
+    'year_clause' => 'ASC'
+  ),
+  "ayt" => array(
+    'author_clause' => 'ASC',
+    'year_clause' => 'ASC',
+    'title' => 'ASC'
+  ),
+  "tay" => array(
+    'title' => 'ASC',
+    'author_clause' => 'ASC',
+    'year_clause' => 'ASC'
+  ),
+  "tya" => array(
+    'title' => 'ASC',
+    'author_clause' => 'ASC',
+    'year_clause' => 'ASC'
+  ),
+  "yat" => array(
+    'year_clause' => 'ASC',
+    'author_clause' => 'ASC',
+    'title' => 'ASC'
+  ),
+  "yta" => array(
+    'year_clause' => 'ASC',
+    'title' => 'ASC',
+    'author_clause' => 'ASC'
+  ),
+  "ryat" => array(
+    'year_clause' => 'DESC',
+    'author_clause' => 'ASC',
+    'title' => 'ASC'
+  ),
+  "ryta" => array(
+    'year_clause' => 'DESC',
+    'title' => 'ASC',
+    'author_clause' => 'ASC'
+  )
+);
+
 $args = array(
   'post_type' => 'bib',
   'post_status'=>'publish',
@@ -38,14 +123,10 @@ $args = array(
         'key' => 'year'
       ),
       'author_clause' => array(
-        //'key' => 'authorstring'
+        'key' => 'citation'
       )
     ),
-    'orderby' => array(
-      'year_clause' => 'DESC',
-       //'author_clause' => 'ASC',
-      'title' => 'ASC'
-    )
+    'orderby' => $sort_orders[$_POST['sort']]
   );
 
 // $args = array(
