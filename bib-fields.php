@@ -23,9 +23,9 @@ $bibliography_meta_fields = array(
         'type'  => 'textarea'
     ),
     array(
-        'label'=> 'URL',
+        'label'=> 'URLs',
         'desc'  => 'Enter any URLs for this reference entry, one per line.',
-        'id'    => 'url',
+        'id'    => 'urls',
         'type'  => 'textarea'
     ),
     array(
@@ -48,11 +48,11 @@ $bibliography_meta_fields = array(
         'options' => array (
             'book' => array (
                 'label' => 'Book',
-                'value' => 'book'
+                'value' => 'Book'
             ),
             'chap' => array (
                 'label' => 'Book Chapter',
-                'value' => 'chap'
+                'value' => 'Book Chapter'
             ),
             'conf' => array (
                 'label' => 'Conference Proceeding / Presentation',
@@ -76,7 +76,7 @@ $bibliography_meta_fields = array(
             ),
             'jour' => array (
                 'label' => 'Journal Article',
-                'value' => 'jour'
+                'value' => 'Journal Article'
             ),
             'mgzn' => array (
                 'label' => 'Magazine Article',
@@ -99,7 +99,7 @@ $bibliography_meta_fields = array(
     array(
         'label'=> 'Secondary Title',
         'desc'  => 'Enter a secondary title for this entry such as the book title for a book chapter',
-        'id'    => 'secondary-title',
+        'id'    => 'title-secondary',
         'type'  => 'text'
     ),
     array(
@@ -193,15 +193,21 @@ $bibliography_meta_fields = array(
         'type'  => 'text'
     ),
     array(
-        'label'=> 'Funding Information*',
+        'label'=> 'Funding*',
         'desc'  => '*May be used by CPC Library, not visible to the public',
         'id'    => 'funding',
         'type'  => 'text'
     ),
     array(
-        'label'=> 'Affiliation*',
+        'label'=> 'CPC Notes*',
         'desc'  => '*May be used by CPC Library, not visible to the public',
-        'id'    => 'affiliation',
+        'id'    => 'cpc-notes',
+        'type'  => 'text'
+    ),
+    array(
+        'label'=> 'PMC*',
+        'desc'  => '*May be used by CPC Library, not visible to the public',
+        'id'    => 'translated-title',
         'type'  => 'text'
     ),
     array(
@@ -216,11 +222,11 @@ $frontendfields = array(
   //Determines the order and title of fields displayed on the front-end
   "Citation"=>"citation",
   "Abstract"=>"abstract",
-  "URL"=>"url",
+  "URLs"=>"urls",
   "Keyword(s)"=>"keywords",
   "Notes"=>"notes",
   "Reference Type"=>"type",
-  "Secondary Title"=>"secondary-title",
+  "Secondary Title"=>"title-secondary",
   "Series Title"=>"series-title",
   "Author(s)"=>"authors",
   "Editor(s)"=>"editors",

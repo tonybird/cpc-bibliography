@@ -1,0 +1,34 @@
+/* Pagination */
+.page_nav .page-numbers{
+        background:#BCBCBC;
+	color:#fff;
+	display:block;
+	width:auto;
+	float:left;
+	margin: 4px 4px 4px 0;
+	padding:15px 18px 14px 18px;
+	text-decoration:none;
+}
+
+.page_nav .page-numbers:hover{
+	background: #24221D;
+	color:#fff;
+	text-decoration: none;
+}
+
+.page_nav .current{
+  background: #24221D;
+	color:#fff;
+  padding:15px 18px 14px 18px;
+}
+
+current {
+  /* background:#BCBCBC;
+color:#fff;
+display:block;
+width:auto;
+float:left;
+margin: 4px 4px 4px 0;
+padding:15px 18px 14px 18px; */
+text-decoration:none;
+}

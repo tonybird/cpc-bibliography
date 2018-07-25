@@ -143,6 +143,7 @@ class RefLib_endnotexml {
 					$out .= '<short-title><style face="normal" font="default" size="100%">' . $this->_export($ref['title-short']) . '</style></short-title>';
 				if (isset($ref['alt-journal']) && $ref['alt-journal'])
 					$out .= '<alt-title><style face="normal" font="default" size="100%">' . $this->_export($ref['alt-journal']) . '</style></alt-title>';
+				$out .= '<translated-title><style face="normal" font="default" size="100%">' . (isset($ref['translated-title']) && $ref['translated-title'] ? $this->_export($ref['translated-title']) : '') . '</style></translated-title>';
 			$out .= '</titles>';
 
 				$out .= '<periodical><full-title><style face="normal" font="default" size="100%">' . (isset($ref['periodical-title']) && $ref['periodical-title'] ? $this->_export($ref['periodical-title']) : '') . '</style></full-title></periodical>';
@@ -150,9 +151,10 @@ class RefLib_endnotexml {
 			// Simple key values
 			// EndNote field on left, RefLib on right
 			foreach (array(
+				'rec-number' => 'id',
 				'access-date' => 'access-date',
 				'accession-num' => 'accession-num',
-				'auth-address' => 'address',
+				'auth-address' => 'cpc-notes',
 				'electronic-resource-num' => 'doi',
 				'pages' => 'pages',
 				'volume' => 'volume',
@@ -160,8 +162,8 @@ class RefLib_endnotexml {
 				'section' => 'section',
 				'abstract' => 'abstract',
 				'isbn' => 'isbn',
-				'label' => 'label',
-				'caption' => 'caption',
+				'label' => 'id',
+				'caption' => 'funding',
 				'language' => 'language',
 				'notes' => 'notes',
 				'research-notes' => 'research-notes',
@@ -169,11 +171,11 @@ class RefLib_endnotexml {
 				'remote-database-name' => 'database',
 				'work-type' => 'work-type',
 				'custom1' => 'custom1',
-				'custom2' => 'custom2',
+				'custom2' => 'pmcid',
 				'custom3' => 'custom3',
 				'custom4' => 'custom4',
 				'custom5' => 'custom5',
-				'custom6' => 'custom6',
+				'custom6' => 'nihmsid',
 				'custom7' => 'custom7',
 			) as $enkey => $ourkey)
 				if (isset($ref[$ourkey]) && $ref[$ourkey])
@@ -223,15 +225,15 @@ class RefLib_endnotexml {
 				'urls' => array(),
 				'title' => '',
 			);
-			foreach ($record->xpath('contributors/authors/author/style/text()') as $authors) 
+			foreach ($record->xpath('contributors/authors/author/style/text()') as $authors)
 				$ref['authors'][] = $this->_GetText($authors);
 
-			foreach ($record->xpath('urls/related-urls/url/style/text()') as $url) 
+			foreach ($record->xpath('urls/related-urls/url/style/text()') as $url)
 				$ref['urls'][] = $this->_GetText($url);
 
 			if ($record->xpath('keywords')) {
 				$ref['keywords'] = array();
-				foreach ($record->xpath('keywords/keyword/style/text()') as $keyword) 
+				foreach ($record->xpath('keywords/keyword/style/text()') as $keyword)
 					$ref['keywords'][] = $this->_GetText($keyword);
 			}
 
@@ -239,6 +241,8 @@ class RefLib_endnotexml {
 				$ref['title'] = $this->_GetText($find);
 			if ($find = $record->xpath("titles/secondary-title/style/text()"))
 				$ref['title-secondary'] = $this->_GetText($find);
+			if ($find = $record->xpath("titles/translated-title/style/text()"))
+					$ref['translated-title'] = $this->_GetText($find);
 			if ($find = $record->xpath("titles/short-title/style/text()"))
 				$ref['title-short'] = $this->_GetText($find);
 			if ($find = $record->xpath("titles/alt-title/style/text()"))
@@ -262,9 +266,10 @@ class RefLib_endnotexml {
 			// Simple key=>vals
 			// EndNote on left, RefLib on right
 			foreach (array(
+				'rec-number' => 'id',
 				'access-date' => 'access-date',
 				'accession-num' => 'accession-num',
-				'auth-address' => 'address',
+				'auth-address' => 'cpc-notes',
 				'electronic-resource-num' => 'doi',
 				'pages' => 'pages',
 				'volume' => 'volume',
@@ -275,23 +280,24 @@ class RefLib_endnotexml {
 				'notes' => 'notes',
 				'research-notes' => 'research-notes',
 				'label' => 'label',
-				'caption' => 'caption',
+				'caption' => 'funding',
 				'language' => 'language',
 				'remote-database-provider' => 'database-provider',
 				'remote-database-name' => 'database',
 				'work-type' => 'work-type',
 				'custom1' => 'custom1',
-				'custom2' => 'custom2',
+				'custom2' => 'pmcid',
 				'custom3' => 'custom3',
 				'custom4' => 'custom4',
 				'custom5' => 'custom5',
-				'custom6' => 'custom6',
+				'custom6' => 'nihmsid',
 				'custom7' => 'custom7',
 			) as $enkey => $ourkey) {
 				if (! $find = $record->xpath("$enkey/style/text()") )
 					continue;
 				$ref[$ourkey] = $this->_GetText($find);
 			}
+			$ref['id'] = $this->_GetText($record->xpath("rec-number/text()"));
 			$ref = $this->parent->ApplyFixes($ref);
 
 			if (!$this->parent->refId) { // Use indexed array

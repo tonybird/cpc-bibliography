@@ -3,9 +3,13 @@
 //https://wordpress.stackexchange.com/a/246206
 //sorting by custom post type meta field
 
+//https://itsmereal.com/datatables-server-side-processing-in-wordpress/
+
 add_shortcode('bibliography', 'display_entries');
 
 function display_entries() {
+
+  wp_enqueue_style( 'bib-list-style', plugin_dir_url(__FILE__) . '/css/bib-list.css' );
 
 $sort_options = array(
   "aty" => "Author, Title, Year",
@@ -17,20 +21,41 @@ $sort_options = array(
   "ryat" => "Year (Reversed), Author, Title",
   "ryta" => "Year (Reversed), Title, Author"
 );
+
+$type_options = array(
+  "" => "--- Select ---",
+  "Journal Article" => "Journal Article",
+  "Book" => "Book",
+  "Book Chapter" => "Book Chapter",
+  "Edited Book" => "Edited Book"
+);
+
 ?>
-<form id="search-sort" method="post">
+<form id="search-sort" method="get">
   <p>
   <label for="search">Search: </label>
-  <input type="text" id="search" name="search">
+  <input type="text" id="search" name="search" value='<?php echo $_GET['search']?>'>
   <label for="sort">Sort By: </label>
-<select class="category-select" id="sort" name="sort" onchange="change()">
+  <select id="sort" name="sort" onchange="change()">
 
   <?php
-  if ($_POST['sort']=="") $_POST['sort']="ryat";
+  if ($_GET['sort']=="") $_GET['sort']="ryat";
 foreach ($sort_options as $key =>$value) {
   echo "<option value='".$key."'";
-  if ($_POST['sort']==$key) echo "selected='selected'";
+  if ($_GET['sort']==$key) echo "selected='selected'";
   echo ">".$value."</option>";
+}
+?>
+
+</select>
+<label for="type">Reference Type: </label>
+<select id="type" name="type" onchange="change()">
+
+<?php
+foreach ($type_options as $key =>$value) {
+echo "<option value='".$key."'";
+if ($_GET['type']==$key) echo "selected='selected'";
+echo ">".$value."</option>";
 }
 ?>
 
@@ -113,6 +138,22 @@ $sort_orders = array(
   )
 );
 
+$author_clause = array(
+  'key' => 'citation'
+);
+if ($_GET['search']!=="") {
+  $author_clause['value'] = $_GET['search'];
+  $author_clause['compare'] = 'LIKE';
+}
+
+$type_clause = array(
+  'key' => 'type'
+);
+if (isset($_GET['type']) && $_GET['type']!=="") {
+  $type_clause['value'] = $_GET['type'];
+  $type_clause['compare'] = '=';
+}
+
 $args = array(
   'post_type' => 'bib',
   'post_status'=>'publish',
@@ -122,11 +163,10 @@ $args = array(
       'year_clause' => array(
         'key' => 'year'
       ),
-      'author_clause' => array(
-        'key' => 'citation'
-      )
+      'author_clause' => $author_clause,
+      'type_clause' => $type_clause
     ),
-    'orderby' => $sort_orders[$_POST['sort']]
+    'orderby' => $sort_orders[$_GET['sort']]
   );
 
 // $args = array(
@@ -179,6 +219,7 @@ $args = array(
     $wp_query   = NULL;
     $wp_query   = $custom_query;
 
+    echo "<h6>Displaying ".$wp_query->post_count." of ".$wp_query->found_posts." entries.</h6>";
     // Output custom query loop
     if ( $custom_query->have_posts() ) :
         while ( $custom_query->have_posts() ) :
@@ -193,10 +234,21 @@ $args = array(
     // Reset postdata
     wp_reset_postdata();
 
+
+
     // Custom query loop pagination
-    previous_posts_link( '< Previous' );
-    echo " ";
-    next_posts_link( 'Next >', $custom_query->max_num_pages );
+    // previous_posts_link( '< Previous' );
+    // echo " ";
+    // next_posts_link( 'Next >', $custom_query->max_num_pages );
+    $big = 999999999; // need an unlikely integer
+    echo "<div class='page-nav'>";
+      echo paginate_links( array(
+      'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
+      'format' => '?paged=%#%',
+      'current' => max( 1, get_query_var('paged') ),
+      'total' => $wp_query->max_num_pages
+    ) );
+    echo "</div>";
 
     // Reset main query object
     $wp_query = NULL;
@@ -243,5 +295,18 @@ $args = array(
 // endif;
 
 }
+
+// Numbered Pagination
+function wplift_pagination() {
+	global $wp_query;
+		$big = 999999999; // need an unlikely integer
+			echo paginate_links( array(
+			'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
+			'format' => '?paged=%#%',
+			'current' => max( 1, get_query_var('paged') ),
+			'total' => $wp_query->max_num_pages
+		) );
+}
+
 
 ?>

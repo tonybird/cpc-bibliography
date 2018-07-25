@@ -7,18 +7,21 @@ add_shortcode( 'classtest', 'class_test_func');
 function class_test_func() {
   require( plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/reflib.php');
 
-  $str = file_get_contents(plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/tests/data/multiline-abstract.ris');
-  function remove_breaks($matches) {
-  	return preg_replace( "/\r|\n/", " ", $matches[1] )."\nAD  -";
-  }
-  $str = preg_replace_callback ( "/(AB  - (.*[\n]){2,}?)[A-Z]{2}  -/" , "remove_breaks" , $str );
-  echo "<pre>".$str."</pre>";
-  file_put_contents(plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/tests/data/multiline-abstract-output.ris', $str);
+  // $str = file_get_contents(plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/tests/data/multiline-abstract.ris');
+  // function remove_breaks($matches) {
+  // 	return preg_replace( "/\r|\n/", " ", $matches[1] )."\nAD  -";
+  // }
+  // $str = preg_replace_callback ( "/(AB  - (.*[\n]){2,}?)[A-Z]{2}  -/" , "remove_breaks" , $str );
+  // echo "<pre>".$str."</pre>";
+  // file_put_contents(plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/tests/data/multiline-abstract-output.ris', $str);
 
   $lib = new RefLib();
   // $lib->SetContentsFile($string);
-  $lib->SetContentsFile(plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/tests/data/multiline-abstract-output.ris');
+  $lib->SetContentsFile(plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/tests/data/cpc-endnote.xml');
   // $importlib = array_slice($lib->refs, 1300, 5);
+
+  print_r($lib);
+  echo "</br></br>";
   $importlib = $lib->refs;
 
   foreach($importlib as $num => $fields) {
@@ -63,8 +66,16 @@ class Bibliography_Entry
 
   public function add_reflib_meta($fields) {
     foreach ($fields as $k => $v) {
-      if (is_string($v)) $v = trim($v);
-      if (is_array($v)) $v = array_map('trim', $v);
+      if (is_string($v)) {
+        $v = trim($v);
+        echo "$k: $v</br>";
+      }
+      if (is_array($v)) {
+        echo "$k: ";
+        $v = array_map('trim', $v);
+        print_r($v);
+        echo "</br>";
+      }
       $this->$k = $v;
     }
   }
@@ -111,8 +122,8 @@ class Bibliography_Entry
 
     //add type-specific citation content
     switch($this->type) {
-      case "jour":
-      $citation = "{$citation} <i>".$this->{'secondary-title'};
+      case "Journal Article":
+      $citation = "{$citation} <i>".$this->{'title-secondary'};
       if ($this->volume) $citation = "{$citation}, ".$this->volume;
       if ($this->number) $citation = "{$citation}(".$this->number.")";
       $citation = $citation . '</i>';
@@ -120,28 +131,28 @@ class Bibliography_Entry
       $citation = $citation . '.';
       if ($this->pmcid) $citation = "{$citation} PMCID: ".$this->pmcid;
       break;
-      case "edbook":
-      case "chap":
+      case "Edited Book":
+      case "Book Section":
       if (count($editor_arr)>1) {
         $editors = "{$editorlist} (Eds.)";
       } else if (count($editor_arr) == 1){
         $editors = "{$editorlist} (Ed.)";
       }
-      if ($this->{'secondary-title'}) {
-        $citation = "{$citation} In {$editors}, <i>".$this->{'secondary-title'}."</i>";
+      if ($this->{'title-secondary'}) {
+        $citation = "{$citation} In {$editors}, <i>".$this->{'title-secondary'}."</i>";
       } else {
         $citation = "{$citation} In {$editors}";
       }
       if ($this->pages) $citation = "{$citation} (pp. ".$this->pages.")";
       $citation = $citation . ".";
-      case "book":
+      case "Book":
       if ($this->city && $this->publisher) $citation = $citation . " " . $this->city .": ".$this->publisher.".";
       else if ($this->city) $citation = $citation . " " . $this->city . ".";
       else if ($this->publisher) $citation = $citation . " " . $this->publisher.".";
       break;
-      case "conf":
-      case "rprt":
-      if ($this->{'secondary-title'}) $citation = "{$citation} ".$this->secondarytitle.".";
+      case "Conference Proceedings":
+      case "Report":
+      if ($this->{'title-secondary'}) $citation = "{$citation} ".$this->secondarytitle.".";
       if ($this->city && $this->publisher) $citation = $citation . " " . $this->city .": ".$this->publisher.".";
       else if ($this->city) $citation = $citation . " " . $this->city . ".";
       else if ($this->publisher) $citation = $citation . " " . $this->publisher.".";

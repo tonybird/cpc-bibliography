@@ -31,8 +31,9 @@ class RefLib_ris {
 		'C2' => 'pmcid',
 		'C6' => 'nihmsid',
 		'M1' => 'misc',
-		'AD' => 'affiliation',
+		'AD' => 'cpc-notes',
 		'CA' => 'funding',
+		'TT' => 'pmc',
 
 		//Fields above this line were added for CPC use
 

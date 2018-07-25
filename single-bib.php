@@ -19,6 +19,7 @@ $meta = get_post_meta( $post->ID, 'bib_fields', true );
 		<h2><?php the_title(); ?></h2>
 
 		<?php
+
 		//the_meta();
 				include 'bib-fields.php';
 				//print_r(get_post_meta($post->ID));
@@ -35,16 +36,22 @@ $meta = get_post_meta( $post->ID, 'bib_fields', true );
 							$val = "";
 						}
 								break;
-						case "type":
-						//make reference type pretty (JOUR -> Journal)
-							$val = $referencetypes[$post->type];
-								break;
+						// case "type":
+						// //make reference type pretty (JOUR -> Journal)
+						// 	$val = $referencetypes[$post->type];
+						// 		break;
 						case "keywords":
 						case "authors":
 						case "editors":
 						case "series-authors":
 							$val = implode("</br>",$post->$fieldid);
 								break;
+						case "urls":
+							$val = implode("</br>", array_map(
+								function ($url) { return "<a href='".$url."'>$url</a>"; },
+								$post->urls)
+							);
+							break;
 						default:
 							$val = $post->$fieldid;
 					}

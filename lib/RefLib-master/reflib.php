@@ -175,6 +175,7 @@ class RefLib {
 							return 'ris';
 						if (preg_match('/^PMID- /ms', $preview))
 							return 'medline';
+							else return 'endnotexml';
 					}
 			}
 		}
@@ -226,7 +227,7 @@ class RefLib {
 				$ref[$plural] = array($ref[$single]);
 				unset($ref[$single]);
 			}
-	
+
 		if (isset($ref['date']))
 			$ref['date'] = $this->ToEpoc($ref['date']);
 
