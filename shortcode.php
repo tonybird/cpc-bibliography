@@ -26,15 +26,16 @@ $type_options = array(
   "" => "--- Select ---",
   "Journal Article" => "Journal Article",
   "Book" => "Book",
-  "Book Chapter" => "Book Chapter",
+  "Book Section" => "Book Chapter",
   "Edited Book" => "Edited Book"
 );
 
 ?>
 <form id="search-sort" method="get">
   <p>
-  <label for="search">Search: </label>
-  <input type="text" id="search" name="search" value='<?php echo $_GET['search']?>'>
+  <input type="text" placeholder="Search" id="search" name="search" value='<?php echo $_GET['search']?>'>
+  <div class="controls">
+    <div>
   <label for="sort">Sort By: </label>
   <select id="sort" name="sort" onchange="change()">
 
@@ -48,6 +49,8 @@ foreach ($sort_options as $key =>$value) {
 ?>
 
 </select>
+</div>
+<div>
 <label for="type">Reference Type: </label>
 <select id="type" name="type" onchange="change()">
 
@@ -60,7 +63,9 @@ echo ">".$value."</option>";
 ?>
 
 </select>
+</div>
 <button type="submit" form="search-sort">Submit</button>
+</div>
 </p>
 </form>
 

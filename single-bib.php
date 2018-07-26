@@ -36,6 +36,9 @@ $meta = get_post_meta( $post->ID, 'bib_fields', true );
 							$val = "";
 						}
 								break;
+								case "citation":
+									$val = "<pre>".$post->citation."</pre>";
+									break;
 						// case "type":
 						// //make reference type pretty (JOUR -> Journal)
 						// 	$val = $referencetypes[$post->type];
