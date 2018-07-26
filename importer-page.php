@@ -10,7 +10,7 @@ add_action('admin_menu', 'add_bib_subpages');
 include( plugin_dir_path( __FILE__ ) . 'keyword-search.php');
 
 function add_bib_subpages() {
-add_submenu_page('edit.php?post_type=bib', 'Import Bibliography File', 'Import Bibliography', 'manage_options', 'ris-import', 'ris_importer_page');
+add_submenu_page('edit.php?post_type=bib', 'Import Endnote XML File', 'Import from EndNote', 'manage_options', 'bib-import', 'bib_importer_page');
 add_submenu_page('edit.php?post_type=bib', 'Keyword Search', 'Keyword Search', 'manage_options', 'keyword-search', 'bib_keyword_search');
 add_submenu_page('edit.php?post_type=bib', 'Bibliography Settings', 'Settings', 'manage_options', 'bib-settings', 'bib_settings_page');
 }
@@ -40,10 +40,10 @@ function bib_settings_page() {
   	</form></div>
   <?php
 }
-function ris_importer_page() {
+function bib_importer_page() {
 
 ?>
-<div class="wrap"><h1>Import Bibliography File</h1></div>
+<div class="wrap"><h1>Import EndNote (XML) File</h1></div>
 
 <?php settings_errors(); ?>
 
@@ -159,6 +159,8 @@ function ris_importer_page() {
       $b->add_reflib_meta($fields);
 
       $id = wp_insert_post($b->get_bib_post_data());
+      $b->set_post_id($id);
+      update_post_meta($id, "citation", $b->generate_citation());
       if(is_wp_error($id)){
         echo $id->get_error_message();
       }
