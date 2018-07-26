@@ -80,6 +80,10 @@ class Bibliography_Entry
     }
   }
 
+  public function set_post_id($pid) {
+    $this->post_id = $pid;
+  }
+
   public function generate_citation() {
 
     $author_arr = $this->authors;
@@ -110,9 +114,12 @@ class Bibliography_Entry
       $editorlist = $editorlist . "& " . $editor_arr[count($editor_arr)-1];
     }
 
+    if ($this->post_id != null) {
+      $id = $this->post_id;
+    }
     //create citation base for all content types
     $linkedtitle = "<a href='".get_permalink($id)."'>".$this->title . '</a>';
-    if ($this->type === "BOOK") $linkedtitle = "<i>{$linkedtitle}</i>";
+    if ($this->type === "Book" || $this->type === "Book Section") $linkedtitle = "<i>{$linkedtitle}</i>";
     if ($this->year) $year = "(".$this->year.")";
     if ($authorlist !== "") {
       $citation = "{$authorlist} {$year}. {$linkedtitle}.";

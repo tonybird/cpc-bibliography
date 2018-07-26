@@ -143,6 +143,7 @@ function save_bib_fields_meta($post_id) {
           case "editors":
           case "keywords":
           case "series-authors":
+          case "urls":
             $new = explode("\n", str_replace("\r", "", $_POST[$field['id']]));
             break;
           default:

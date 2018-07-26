@@ -225,8 +225,14 @@ class RefLib_endnotexml {
 				'urls' => array(),
 				'title' => '',
 			);
-			foreach ($record->xpath('contributors/authors/author/style/text()') as $authors)
-				$ref['authors'][] = $this->_GetText($authors);
+			foreach ($record->xpath('contributors/authors/author/style/text()') as $author)
+				$ref['authors'][] = $this->_GetText($author);
+
+			foreach ($record->xpath('contributors/secondary-authors/author/style/text()') as $author)
+					$ref['editors'][] = $this->_GetText($author);
+
+			foreach ($record->xpath('contributors/tertiary-authors/author/style/text()') as $author)
+					$ref['series-authors'][] = $this->_GetText($author);
 
 			foreach ($record->xpath('urls/related-urls/url/style/text()') as $url)
 				$ref['urls'][] = $this->_GetText($url);
@@ -245,6 +251,8 @@ class RefLib_endnotexml {
 					$ref['translated-title'] = $this->_GetText($find);
 			if ($find = $record->xpath("titles/short-title/style/text()"))
 				$ref['title-short'] = $this->_GetText($find);
+				if ($find = $record->xpath("titles/tertiary-title/style/text()"))
+					$ref['series-title'] = $this->_GetText($find);
 			if ($find = $record->xpath("titles/alt-title/style/text()"))
 				$ref['alt-journal'] = $this->_GetText($find);
 			if ($find = $record->xpath("periodical/full-title/style/text()"))
@@ -266,6 +274,8 @@ class RefLib_endnotexml {
 			// Simple key=>vals
 			// EndNote on left, RefLib on right
 			foreach (array(
+				'pub-location' => 'city',
+				'publisher' => 'publisher',
 				'rec-number' => 'id',
 				'access-date' => 'access-date',
 				'accession-num' => 'accession-num',
@@ -298,6 +308,8 @@ class RefLib_endnotexml {
 				$ref[$ourkey] = $this->_GetText($find);
 			}
 			$ref['id'] = $this->_GetText($record->xpath("rec-number/text()"));
+			// $ref['publisher'] = $this->_GetText($record->xpath("publisher/style/text()"));
+			// $ref['city'] = $this->_GetText($record->xpath("city-publication/style/text()"));
 			$ref = $this->parent->ApplyFixes($ref);
 
 			if (!$this->parent->refId) { // Use indexed array

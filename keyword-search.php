@@ -122,14 +122,14 @@ function bib_keyword_search() {
       $articles[$id]['t32'] = (strpos($funding_info, 'CPC T32-Yes') !== false) ? 1 : 0;
       $articles[$id]['r24'] = (strpos($funding_info, 'CPC R24-Yes') !== false) ? 1 : 0;
 
-      $affiliation = $post->affiliation;
+      $affiliation = $post->{'cpc-notes'};
       $articles[$id]['fellow'] = (strpos($affiliation, 'nofellow') !== false) ? 0 : 1;
       $articles[$id]['tp'] = (strpos($affiliation, 'tplist') !== false) ? 1 : 0;
       $articles[$id]['gra'] = (strpos($affiliation, 'gralist') !== false) ? 1 : 0;
       $articles[$id]['staff'] = (strpos($affiliation, 'stafflist') !== false) ? 1 : 0;
 
-      $articles[$id]['journal'] = $post->{'secondary-title'};
-      $articles[$id]['has_journal'] = (in_array($post->{'secondary-title'}, $journals)) ? 1 : 0;
+      $articles[$id]['journal'] = $post->{'title-secondary'};
+      $articles[$id]['has_journal'] = (in_array($post->{'title-secondary'}, $journals)) ? 1 : 0;
 
       $authors_array = $post->authors;
       if (isset($authors_array[0])) $articles[$id]['authors'] = implode("; ",$authors_array);
