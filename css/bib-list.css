@@ -1,8 +1,10 @@
 
-.controls {
+.searchbox-row {
   display: flex;
+  /* min-height: 60px; */
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 15px;
 }
 
 label {
@@ -25,13 +27,39 @@ label {
   font-size: 12px;
 }
 
+#advanced-search {
+  margin-bottom: 10px;
+  display: none;
+}
+
 form {
   display: flex;
   flex-direction: column;
   justiy-content: space-between;
-  padding: 20px 10px 0px 10px;
+  padding: 10px 20px 10px 20px;
   background-color: WhiteSmoke;
 }
+
+
+.searchbox-title {
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+}
+.searchbox-right {
+  justify-content: flex-end;
+}
+
 input[type="text"] {
   background-color : #fff;
+}
+#advanced-search input[type="text"], #advanced-search select {
+  width: 90%;
+  margin-left: 15px;
+  float:left;
+}
+#advanced-search label {
+  width: 10%;
+  float: left;
+  text-align: right;
 }

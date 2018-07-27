@@ -23,18 +23,103 @@ $sort_options = array(
 );
 
 $type_options = array(
-  "" => "--- Select ---",
+  "" => "---- All ----",
   "Journal Article" => "Journal Article",
   "Book" => "Book",
   "Book Section" => "Book Chapter",
   "Edited Book" => "Edited Book"
 );
 
+function get_meta_values($key) {
+    global $wpdb;
+	$result = $wpdb->get_col(
+		$wpdb->prepare( "
+			SELECT DISTINCT pm.meta_value FROM {$wpdb->postmeta} pm
+			LEFT JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+			WHERE pm.meta_key = '%s'
+			AND p.post_status = 'publish'
+			ORDER BY pm.meta_value",
+			$key
+		)
+	);
+	return $result;
+}
+
 ?>
+<script>
+
+  function toggleAdvSearch() {
+      var x = document.getElementById("advanced-search");
+      if (x.style.display === "block") {
+          x.style.display = "none";
+          document.getElementById('adv').value = 'false';
+      } else {
+          x.style.display = "block";
+          document.getElementById('adv').value = 'true';
+      }
+  }
+
+function change(){
+    document.getElementById("search-sort").submit();
+}
+</script>
+
 <form id="search-sort" method="get">
-  <p>
-  <input type="text" placeholder="Search" id="search" name="search" value='<?php echo $_GET['search']?>'>
-  <div class="controls">
+  <input id="adv" name="adv" type="hidden" />
+  <div id="advanced-search">
+    <div class="searchbox-row searchbox-title searchbox-center">Advanced Search</div>
+    <?php
+    $adv_text_fields = array(
+      'title' => array(
+        'label' => 'Title',
+        'placeholder' => 'Enter a word or phrase that must be present in the title field'
+      )
+    );
+
+    foreach ($adv_text_fields as $id =>$field) {
+      echo "<div class='searchbox-row'>
+      <label for='{$id}'>{$field['label']}</label>
+      <input type='text' id='{$id}' name='{$id}' placeholder='{$field['placeholder']}' value='{$_GET[$id]}'>
+      </div>
+      ";
+    }
+
+    $adv_selects = array(
+      'year' => array(
+        'label' => 'Year',
+        'placeholder' => 'Enter a year of publication in the format "2018" or "Forthcoming"'
+      ),
+      'title-secondary' => array(
+        'label' => 'Journal',
+        'placeholder' => 'Limit to the selected journal'
+      ),
+      'publisher' => array(
+        'label' => 'Publisher',
+        'placeholder' => 'Limit to the selected publisher'
+      )
+    );
+
+    foreach ($adv_selects as $id =>$field) {
+      echo "<div class='searchbox-row'>
+      <label for='{$id}'>{$field['label']}</label>
+      <select multiple id='$id' name='$id'>";
+      foreach (get_meta_values($id) as $val) {
+        if ($val !== "`") echo "<option value='$val'>$val</option>";
+      }
+        echo "</select></div>";
+    }
+    ?>
+    <!-- <div class="searchbox-row"><i>Control-click to select multiple items.</i></div> -->
+
+
+  </div>
+
+
+    <div class="searchbox-row">
+  <input type="text" placeholder="Citation Text Search" id="search" name="search" value='<?php echo $_GET['search']?>'>
+  <button type="submit" form="search-sort">Submit</button>
+  </div>
+  <div class="searchbox-row">
     <div>
   <label for="sort">Sort By: </label>
   <select id="sort" name="sort" onchange="change()">
@@ -64,35 +149,15 @@ echo ">".$value."</option>";
 
 </select>
 </div>
-<button type="submit" form="search-sort">Submit</button>
-</div>
-</p>
+<div>
+  <a id="myLink" title="Click to do something"
+   href="#" onclick="toggleAdvSearch();return false;">Advanced Search</a>
+</div></div>
+
 </form>
 
 
-
-<script>
-function change(){
-    document.getElementById("search-sort").submit();
-}
-</script>
-
 <?php
-
-  //the query
-//   $args = array(
-//   'post_type' => 'bib',
-//   'post_status'=>'publish',
-//   'posts_per_page'=>-1,
-//   'orderby'   => 'title',
-//   'order' => 'ASC'
-//   // 'meta_query' => array(
-//   //        'bibfields' => array(
-//   //           'key' => 'year-published',
-//   //           'value' => '2009',
-//   //           'type' => 'NUMERIC' // unless the field is not a number
-//   //   ))
-// );
 
 $args = array(
   'post_type' => 'bib',
@@ -174,41 +239,6 @@ $args = array(
     'orderby' => $sort_orders[$_GET['sort']]
   );
 
-// $args = array(
-//   'post_type' => 'bib',
-//   'post_status'=>'publish',
-//   'posts_per_page'=>-1,
-//   'meta_query' => array(
-//     'relation' => 'AND',
-//     'year_clause' => array(
-//       'key' => 'year'
-//     ),
-//     'author_clause' => array(
-//       'key' => 'authorstring'
-//     )
-//   ),
-//   'orderby' => array(
-//     'year_clause' => 'DESC',
-//     'author_clause' => 'ASC',
-//     'title' => 'ASC'
-//   )
-// );
-
-  // $wpb_all_query = new WP_Query($args);
-  //
-  //
-  //     echo "<table>";
-  //     while ( $wpb_all_query->have_posts() ) : $wpb_all_query->the_post();
-  //     global $post;
-  //
-  //     if (get_field('citation') !== "") {
-  //       echo "<tr>
-  //       <td>$post->citation</td>
-  //       </tr>";
-  //     }
-  //   endwhile;
-  //   echo "</table>";
-  //
 
     // Define custom query parameters
     $custom_query_args = $args;
@@ -258,46 +288,6 @@ $args = array(
     // Reset main query object
     $wp_query = NULL;
     $wp_query = $temp_query;
-
-// DATATABLES
-//   if ( $wpb_all_query->have_posts() ) :
-//     echo "<link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.18/datatables.min.css'/>
-//
-// <script type='text/javascript' src='https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.18/datatables.min.js'></script>
-//
-//
-//     ";
-//
-//     echo "<table id='citations' class='table'>
-//            <thead style='display:none'>
-//              <tr>
-//                <th>Citations</th>
-//              </tr>
-//            </thead>
-//            <tbody>";
-//
-//     while ( $wpb_all_query->have_posts() ) : $wpb_all_query->the_post();
-//     global $post;
-//
-//     if (get_field('citation') !== "") {
-//       echo "<tr>
-//       <td>$post->citation</td>
-//       </tr>";
-//     }
-//   endwhile;
-//   echo "</tbody>
-//   </table>";
-//
-//   echo "<script type='text/javascript'>
-//
-//   $('#citations').DataTable();
-//
-//
-//   </script>";
-//
-//   wp_reset_postdata();
-//   else : echo "<p>Sorry, no bibliography entries were found.</p>";
-// endif;
 
 }
 
