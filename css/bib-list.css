@@ -20,6 +20,7 @@
     border-radius: 2px;
     font-weight: 600;
 }
+
 .current, .dots {
   font-family:"HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
   padding: 5px;
@@ -36,6 +37,9 @@ form {
   flex-direction: column;
   justiy-content: space-between;
   background-color: WhiteSmoke;
+  border-width: 0.25px;
+  border-color: gray;
+  border-style: solid;
 }
 
 input[type="text"] {
@@ -49,8 +53,6 @@ input[type="text"] {
 }
 #advanced-search label {
   font-weight: bold;
-  min-width: 80px;
-  width: 15%;
-  float: left;
-  text-align: right;
+  display: inline;
+  /* float: left; */
 }

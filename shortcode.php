@@ -64,7 +64,7 @@ function change(){
 </script>
 
 <form id="search-sort" method="get">
-  <input id="adv" name="adv" type="hidden" />
+  <input id="adv" name="adv" value="<?php echo $_GET['adv']; ?>" type="hidden" />
 
     <div class="searchbox-row">
   <input type="text" placeholder="Search citations and abstracts..." id="search" name="search" value='<?php echo $_GET['search']?>'>
@@ -111,23 +111,23 @@ echo ">".$value."</option>";
   $adv_text_fields = array(
     'title' => array(
       'label' => 'Title',
-      'placeholder' => 'Enter a word or phrase that must be present in the title field'
+      'placeholder' => 'Title of article, chapter, or book'
     ),
     'author' => array(
       'label' => 'Author',
-      'placeholder' => 'Enter an author name in the format "Last Name, First Name"'
+      'placeholder' => 'Name in the format "Last Name, First Name"'
     ),
     'year' => array(
       'label' => 'Year',
-      'placeholder' => 'Enter a year of publication in the form "2018 or "Forthcoming"'
+      'placeholder' => 'Publication year in the form "2018" or "Forthcoming"'
     ),
     'title-secondary' => array(
       'label' => 'Journal',
-      'placeholder' => 'Limit to a specific journal (or book title, for chapters)'
+      'placeholder' => 'Name of journal or book'
     ),
     'publisher' => array(
       'label' => 'Publisher',
-      'placeholder' => 'Limit to a specific publisher'
+      'placeholder' => 'Name of publisher'
     )
   );
 
@@ -141,11 +141,10 @@ echo ">".$value."</option>";
   }
 
   ?>
-
-  <div class="searchbox-row searchbox-center"><a href='<?php echo get_permalink()."?adv=true";?>'>Reset Search</a></div>
-
+  <div class="searchbox-row searchbox-center">
+    <a href='<?php echo get_permalink()."?adv=true";?>'>Reset Search</a>
+  </div>
 </div>
-
 </form>
 
 <?php
@@ -243,7 +242,18 @@ $args = array(
     $wp_query   = NULL;
     $wp_query   = $custom_query;
 
-    echo "<h6>Displaying ".$wp_query->post_count." of ".$wp_query->found_posts." entries.</h6>";
+    echo "<p><div class='searchbox-row'><div><b>Displaying ".$wp_query->post_count." of ".$wp_query->found_posts." matching citations.</b></div>
+
+    <div class='page-nav'>";
+    $big = 999999999; // need an unlikely integer
+      echo paginate_links( array(
+      'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
+      'format' => '?paged=%#%',
+      'current' => max( 1, get_query_var('paged') ),
+      'total' => $wp_query->max_num_pages
+    ) );
+    echo "</div></div></p>";
+
     // Output custom query loop
     if ( $custom_query->have_posts() ) :
         while ( $custom_query->have_posts() ) :
@@ -259,7 +269,6 @@ $args = array(
     wp_reset_postdata();
 
     // Custom query loop pagination
-    $big = 999999999; // need an unlikely integer
     echo "<div class='page-nav'>";
       echo paginate_links( array(
       'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
@@ -272,8 +281,6 @@ $args = array(
     // Reset main query object
     $wp_query = NULL;
     $wp_query = $temp_query;
-
 }
-
 
 ?>
