@@ -167,6 +167,7 @@ class Bibliography_Entry
       default:
     }
 
+    $this->authorlist = $authorlist;
     $this->citation = $citation;
     return $this->citation;
   }
