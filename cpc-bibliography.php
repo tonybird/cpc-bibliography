@@ -9,7 +9,7 @@ Author: Tony Bird
 
 
 
-include( plugin_dir_path( __FILE__ ) . 'reflib-test.php');
+//include( plugin_dir_path( __FILE__ ) . 'reflib-test.php');
 //include( plugin_dir_path( __FILE__ ) . 'citation-on-publish.php');
 include( plugin_dir_path( __FILE__ ) . 'importer-page.php');
 
