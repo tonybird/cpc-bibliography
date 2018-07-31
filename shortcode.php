@@ -3,11 +3,10 @@
 //https://wordpress.stackexchange.com/a/246206
 //sorting by custom post type meta field
 
-//https://itsmereal.com/datatables-server-side-processing-in-wordpress/
-
 add_shortcode('bibliography', 'display_entries');
 
 function display_entries() {
+  ob_start();
 
   wp_enqueue_style( 'bib-list-style', plugin_dir_url(__FILE__) . '/css/bib-list.css' );
 
@@ -22,7 +21,7 @@ $sort_options = array(
   "ryta" => "Year (Reversed), Title, Author"
 );
 $type_options = array(
-  "" => "---- All ----",
+  "" => "All",
   "Journal Article" => "Journal Article",
   "Book" => "Book",
   "Book Section" => "Book Chapter",
@@ -46,7 +45,6 @@ function get_meta_values($key) {
 
 ?>
 <script>
-
   function toggleAdvSearch() {
       var x = document.getElementById("advanced-search");
       if (x.style.display === "block") {
@@ -58,27 +56,38 @@ function get_meta_values($key) {
       }
   }
 
-function change(){
-    document.getElementById("search-sort").submit();
+// function change(){
+//     document.getElementById("search-sort").submit();
+// }
+
+function ignoreEmptySearchFields() {
+    var myForm = document.getElementById('search-sort');
+    var allInputs = myForm.querySelectorAll('input,textarea,select')
+    var input, i;
+
+    for(i = 0; input = allInputs[i]; i++) {
+        if(input.getAttribute('name') && !input.value) {
+            input.setAttribute('disabled', 'disabled');
+        }
+    }
 }
+
 </script>
 
-<form id="search-sort" method="get">
-  <input id="adv" name="adv" value="<?php echo $_GET['adv']; ?>" type="hidden" />
+<form id="search-sort" method="get" onsubmit="ignoreEmptySearchFields()">
+  <input id="adv" name="adv" value="<?php if (isset($_GET['adv'])) echo $_GET['adv']; ?>" type="hidden" />
 
     <div class="searchbox-row">
-  <input type="text" placeholder="Search citations and abstracts..." id="search" name="search" value='<?php echo $_GET['search']?>'>
+  <input type="text" placeholder="Search citations and abstracts..." id="search" name="q" value='<?php if (isset($_GET['q'])) echo $_GET['q']?>'>
   <button type="submit" form="search-sort">Submit</button>
   </div>
   <div class="searchbox-row">
-    <!-- <div><input type="reset" value="Reset" onClick="window.location.reload()">
-</div> -->
     <div>
   <label for="sort">Sort By: </label>
   <select id="sort" name="sort" onchange="change()">
 
   <?php
-  if ($_GET['sort']=="") $_GET['sort']="ryat";
+  if (!isset($_GET['sort']) || $_GET['sort']=="") $_GET['sort']="ryat";
 foreach ($sort_options as $key =>$value) {
   echo "<option value='".$key."'";
   if ($_GET['sort']==$key) echo "selected='selected'";
@@ -95,7 +104,7 @@ foreach ($sort_options as $key =>$value) {
 <?php
 foreach ($type_options as $key =>$value) {
 echo "<option value='".$key."'";
-if ($_GET['type']==$key) echo "selected='selected'";
+if (isset($_GET['adv']) && $_GET['type']==$key) echo "selected='selected'";
 echo ">".$value."</option>";
 }
 ?>
@@ -109,32 +118,33 @@ echo ">".$value."</option>";
 <div id="advanced-search">
   <?php
   $adv_text_fields = array(
-    'title' => array(
+    't' => array(
       'label' => 'Title',
       'placeholder' => 'Title of article, chapter, or book'
     ),
-    'author' => array(
+    'a' => array(
       'label' => 'Author',
       'placeholder' => 'Name in the format "Last Name, First Name"'
     ),
-    'year' => array(
+    'y' => array(
       'label' => 'Year',
       'placeholder' => 'Publication year in the form "2018" or "Forthcoming"'
     ),
-    'title-secondary' => array(
+    'j' => array(
       'label' => 'Journal',
       'placeholder' => 'Name of journal or book'
     ),
-    'publisher' => array(
+    'p' => array(
       'label' => 'Publisher',
       'placeholder' => 'Name of publisher'
     )
   );
 
   foreach ($adv_text_fields as $id =>$field) {
+    $val = (isset($_GET[$id])) ? $_GET[$id] : "";
     echo "<div class='searchbox-row'>
     <label for='{$id}'>{$field['label']}</label>
-    <input type='text' id='{$id}' name='{$id}' placeholder='{$field['placeholder']}' value='{$_GET[$id]}'>
+    <input type='text' id='{$id}' name='{$id}' placeholder='{$field['placeholder']}' value='$val'>
     </div>
     ";
 
@@ -148,23 +158,21 @@ echo ">".$value."</option>";
 </form>
 
 <?php
-if ($_GET['adv']=='true') {
+if (isset($_GET['adv']) && $_GET['adv']=='true') {
   echo '<script type="text/javascript">document.getElementById("advanced-search").style.display = "block";</script>';
 }
 
 // Prepare WP query from standard search parameters
-
 $meta_query['relation'] = 'AND';
-
 $meta_query['citation-or-abstract'] = array(
     array(
       'key' => 'citation',
-      'value' => $_GET['search'],
+      'value' => (isset($_GET['q'])) ? $_GET['q'] : "",
       'compare' => 'LIKE'
     ),
     array(
       'key' => 'abstract',
-      'value' => $_GET['search'],
+      'value' => (isset($_GET['q'])) ? $_GET['q'] : "",
       'compare' => 'LIKE'
     ),
     'relation' => 'OR'
@@ -173,17 +181,18 @@ $meta_query['citation-or-abstract'] = array(
 // Following 3 clauses must always be present for sorting
 $meta_query['author'] = array(
   'key' => 'authorlist',
-  'value' => $_GET['author'],
+  'value' => (isset($_GET['a'])) ? $_GET['a'] : "",
   'compare' => 'LIKE'
 );
 $meta_query['year'] = array(
   'key' => 'year',
-  'value' => $_GET['year'],
+  'value' => (isset($_GET['y'])) ? $_GET['y'] : "",
   'compare' => 'LIKE'
 );
+
 $meta_query['title'] = array(
   'key' => 'title',
-  'value' => $_GET['title'],
+  'value' => (isset($_GET['t'])) ? $_GET['t'] : "",
   'compare' => 'LIKE'
 );
 
@@ -195,11 +204,16 @@ if (!empty($_GET['type'])) {
 }
 
 // If additional search fields are present, add them to the query
-foreach (array('title-secondary','publisher') as $field) {
-  if (!empty($_GET[$field])) {
-    $meta_query[$field] = array(
-      'key' => $field,
-      'value' => $_GET[$field],
+$additional_fields = array(
+  "j" => "title-secondary",
+  "p" => "publisher"
+);
+
+foreach ($additional_fields as $k => $v) {
+  if (!empty($_GET[$k])) {
+    $meta_query[$v] = array(
+      'key' => $v,
+      'value' => $_GET[$k],
       'compare' => 'LIKE'
     );
   }
@@ -238,12 +252,17 @@ $args = array(
     $custom_query = new WP_Query( $custom_query_args );
 
     // Pagination fix
+    global $wp_query;
     $temp_query = $wp_query;
     $wp_query   = NULL;
     $wp_query   = $custom_query;
 
-    echo "<p><div class='searchbox-row'><div><b>Displaying ".$wp_query->post_count." of ".$wp_query->found_posts." matching citations.</b></div>
+    echo "<p><div class='searchbox-row'><div><b>";
 
+    if ($wp_query->found_posts == 0) echo "No matching citations were found.";
+    else echo "Displaying ".$wp_query->post_count." of ".$wp_query->found_posts." matching citations.";
+
+    echo "</b></div>
     <div class='page-nav'>";
     $big = 999999999; // need an unlikely integer
       echo paginate_links( array(
@@ -281,6 +300,13 @@ $args = array(
     // Reset main query object
     $wp_query = NULL;
     $wp_query = $temp_query;
+
+
+    $ReturnString = ob_get_contents();
+    ob_end_clean();
+    return $ReturnString;
+    // return ob_get_contents();
+
 }
 
 ?>
