@@ -1,20 +1,5 @@
 <?php
-$referencetypes = array(
-  "book" => "Book",
-  "chap" => "Book Chapter",
-  "conf" => "Conference Proceeding / Presentation",
-  "echap" => "Electronic Book Section",
-  "edbook" => "Edited Book",
-  "elec" => "Electronic Citation",
-  "gen" => "Generic / Unpublished",
-  "jour" => "Journal Article",
-  "mgzn" => "Magazine Article",
-  "rprt" => "Report / Working Paper",
-  "ser" => "Serial (Book, Monograph)",
-  "thes" => "Thesis / Dissertation"
-);
 
-// Field Array
 $bibliography_meta_fields = array(
     array(
         'label'=> 'Abstract',
@@ -56,23 +41,23 @@ $bibliography_meta_fields = array(
             ),
             'conf' => array (
                 'label' => 'Conference Proceeding / Presentation',
-                'value' => 'conf'
+                'value' => 'Conference'
             ),
             'echap' => array (
                 'label' => 'Electronic Book Section',
-                'value' => 'echap'
+                'value' => 'Electronic Book Section'
             ),
             'edbook' => array (
                 'label' => 'Edited Book',
-                'value' => 'edbook'
+                'value' => 'Edited Book'
             ),
             'elec' => array (
                 'label' => 'Electronic Citation',
-                'value' => 'elec'
+                'value' => 'Electronic Citation'
             ),
             'gen' => array (
                 'label' => 'Generic / Unpublished',
-                'value' => 'gen'
+                'value' => 'Generic'
             ),
             'jour' => array (
                 'label' => 'Journal Article',
@@ -80,19 +65,19 @@ $bibliography_meta_fields = array(
             ),
             'mgzn' => array (
                 'label' => 'Magazine Article',
-                'value' => 'mgzn'
+                'value' => 'Magazine Article'
             ),
             'rprt' => array (
                 'label' => 'Report / Working Paper',
-                'value' => 'rprt'
+                'value' => 'Report'
             ),
             'ser' => array (
                 'label' => 'Serial (Book, Monograph)',
-                'value' => 'ser'
+                'value' => 'Serial'
             ),
             'thes' => array (
                 'label' => 'Thesis / Dissertation',
-                'value' => 'thes'
+                'value' => 'Thesis'
             )
         )
     ),
