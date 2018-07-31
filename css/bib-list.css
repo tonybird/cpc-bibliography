@@ -3,11 +3,19 @@
   display: flex;
   /* min-height: 60px; */
   justify-content: space-between;
-  align-items: center;
+  /* align-items: center; */
+  /* align-content: center; */
+  /* align-self: center; */
   margin: 15px;
 }
 .searchbox-center {
   justify-content: center;
+}
+
+input[type="text"] {
+width: 100%;
+background-color : #fff;
+
 }
 
 .page-numbers {
@@ -40,10 +48,6 @@ form {
   border-width: 0.25px;
   border-color: gray;
   border-style: solid;
-}
-
-input[type="text"] {
-  background-color : #fff;
 }
 
 #advanced-search input[type="text"], #advanced-search select {

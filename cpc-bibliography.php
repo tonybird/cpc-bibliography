@@ -61,17 +61,31 @@ include( plugin_dir_path( __FILE__ ) . 'bib-admin.php');
 // [bibliography] shortcode
 include( plugin_dir_path( __FILE__ ) . 'shortcode.php');
 
-// Single bibliography entry template
-add_filter('single_template', 'load_bib_template');
-function load_bib_template($template) {
-  //Load template to display the bibliography on the front-end
-  global $post;
-  if ($post->post_type == "bib" && $template !== locate_template(array("single-bib.php"))){
-    // This is a "bib" post AND a 'single bib template' is not found on
-    // theme or child theme directories, so load it from plugin directory
-    return plugin_dir_path( __FILE__ ) . "single-bib.php";
-  }
-  return $template;
+// // Single bibliography entry template
+// add_filter('single_template', 'load_bib_template');
+// function load_bib_template($template) {
+//   //Load template to display the bibliography on the front-end
+//   global $post;
+//   if ($post->post_type == "bib" && $template !== locate_template(array("single-bib.php"))){
+//     // This is a "bib" post AND a 'single bib template' is not found on
+//     // theme or child theme directories, so load it from plugin directory
+//     return plugin_dir_path( __FILE__ ) . "single-bib.php";
+//   }
+//   return $template;
+// }
+
+/* Filter the single_template with our custom function*/
+add_filter('single_template', 'my_custom_template');
+
+function my_custom_template($single) {
+    global $wp_query, $post;
+    /* Checks for single template by post type */
+    if ( $post->post_type == 'bib' ) {
+        if ( file_exists( plugin_dir_path( __FILE__ ) . '/citation-template.php' ) ) {
+            return plugin_dir_path( __FILE__ ) . '/citation-template.php';
+        }
+    }
+    return $single;
 }
 
 ?>
