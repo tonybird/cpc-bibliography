@@ -142,16 +142,20 @@ class Bibliography_Entry
       case "Book Section":
       if (count($editor_arr)>1) {
         $editors = "{$editorlist} (Eds.)";
-      } else if (count($editor_arr) == 1){
+      } else if ((count($editor_arr)) == 1 && !empty($editor_arr[0])) {
         $editors = "{$editorlist} (Ed.)";
       }
-      if ($this->{'title-secondary'}) {
+
+      if ($this->{'title-secondary'} && $editors != "") {
         $citation = "{$citation} In {$editors}, <i>".$this->{'title-secondary'}."</i>";
-      } else {
-        $citation = "{$citation} In {$editors}";
+      } else if ($editors != "") {
+        $citation = "{$citation}. {$editors}";
+      } else if ($this->{'title-secondary'} != "") {
+        $citation = "{$citation} In <i>".$this->{'title-secondary'}."</i>";
       }
+
       if ($this->pages) $citation = "{$citation} (pp. ".$this->pages.")";
-      $citation = $citation . ".";
+      if (substr($citation,-1) !=".") $citation = $citation . ".";
       case "Book":
       if ($this->city && $this->publisher) $citation = $citation . " " . $this->city .": ".$this->publisher.".";
       else if ($this->city) $citation = $citation . " " . $this->city . ".";
@@ -172,6 +176,51 @@ class Bibliography_Entry
     return $this->citation;
   }
 
+// public function generate_citation_ed() {
+//
+//   $author_arr = $this->authors;
+//   $authorlist = "";
+//   if (count($author_arr) == 1 || count($author_arr) == 0) {
+//     $authorlist = $author_arr[0];
+//   } else if (count($author_arr) == 2) {
+//     $authorlist = $author_arr[0] . " & " . $author_arr[1];
+//   } else {
+//     for ($i = 0; $i <= count($author_arr)-2; $i++) {
+//       $authorlist = $authorlist . $author_arr[$i] . "; ";
+//     }
+//     $authorlist = $authorlist . "& " . $author_arr[count($author_arr)-1];
+//   }
+//
+//   if ($this->title == "Journal Article" || $this->title == "Magazine") {
+//     if ($this->volume && $this->number) $volume = "$this->volume($this->number)";
+//     else if ($this->volume) $volume = $this->volume;
+//     else if ($this->number) $volume = $this->number;
+//     else $volume = "";
+//
+//     $pages = $this->pages;
+//     if ($volume && $pages) {
+//       $volume = "$volume, ";
+//       $pages = "$pages.";
+//     } elseif ($volume) $volume = "$volume.";
+//     elseif ($pages) $pages = "$pages.";
+//
+//     $journal = $this->journal;
+//     if ($journal && ($volume || $pages)) {
+//       $journal = "$journal, ";
+//     } else if ($journal) $journal = "$journal.";
+//
+//     if ($this->year) $year = "($this->year)";
+//     $title = $this->title;
+//
+//     $citation = "$authorlist $year <a href='$url'>$title</a> <i>$journal</i> <i>$volume/i> $pages";
+//
+//   }
+//
+//   $this->authorlist = $authorlist;
+//   $this->citation = $citation;
+//   return $this->citation;
+//
+// }
 }
 
  ?>

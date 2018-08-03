@@ -157,7 +157,6 @@ function save_bib_fields_meta($post_id) {
             delete_post_meta($post_id, $field['id'], $old);
         }
     } // end foreach
-    print_r($b->get_bib_post_meta());
     update_post_meta($post_id, "citation", $b->generate_citation());
 }
 
