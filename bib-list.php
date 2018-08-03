@@ -104,7 +104,7 @@ foreach ($sort_options as $key =>$value) {
 <?php
 foreach ($type_options as $key =>$value) {
 echo "<option value='".$key."'";
-if (isset($_GET['adv']) && $_GET['type']==$key) echo "selected='selected'";
+if (isset($_GET['type']) && $_GET['type']==$key) echo "selected='selected'";
 echo ">".$value."</option>";
 }
 ?>
