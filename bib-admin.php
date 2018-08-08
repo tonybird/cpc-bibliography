@@ -1,5 +1,4 @@
 <?php
-include( plugin_dir_path( __FILE__ ) . 'citation-from-id.php');
 
 // Add citations column to Bibliography post listing
 add_filter( 'manage_bib_posts_columns', 'set_custom_edit_bib_columns' );

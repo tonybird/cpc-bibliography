@@ -36,24 +36,16 @@ $bibliography_meta_fields = array(
                 'value' => 'Book'
             ),
             'chap' => array (
-                'label' => 'Book Chapter',
-                'value' => 'Book Chapter'
+                'label' => 'Book Section',
+                'value' => 'Book Section'
             ),
             'conf' => array (
                 'label' => 'Conference Proceeding / Presentation',
                 'value' => 'Conference'
             ),
-            'echap' => array (
-                'label' => 'Electronic Book Section',
-                'value' => 'Electronic Book Section'
-            ),
             'edbook' => array (
                 'label' => 'Edited Book',
                 'value' => 'Edited Book'
-            ),
-            'elec' => array (
-                'label' => 'Electronic Citation',
-                'value' => 'Electronic Citation'
             ),
             'gen' => array (
                 'label' => 'Generic / Unpublished',
@@ -65,7 +57,7 @@ $bibliography_meta_fields = array(
             ),
             'mgzn' => array (
                 'label' => 'Magazine Article',
-                'value' => 'Magazine Article'
+                'value' => 'Magazine'
             ),
             'rprt' => array (
                 'label' => 'Report / Working Paper',

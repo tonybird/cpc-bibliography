@@ -25,7 +25,12 @@ $type_options = array(
   "Journal Article" => "Journal Article",
   "Book" => "Book",
   "Book Section" => "Book Chapter",
-  "Edited Book" => "Edited Book"
+  "Edited Book" => "Edited Book",
+  "Thesis" => "Thesis/Dissertation",
+  "Report" => "Report/Working Paper",
+  "Magazine" => "Magazine Article",
+  "Generic" => "Generic/Unpublished",
+  "Conference" => "Conference/Presentation"
 );
 
 function get_meta_values($key) {
