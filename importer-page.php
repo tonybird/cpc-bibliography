@@ -109,14 +109,6 @@ function bib_importer_page() {
 		if (!$_POST['notes']) $opts->notes = false;
 		if (!$_POST['keywords']) $opts->keywords = false;
 
-    // //Fix multiline abstracts
-    // $str = file_get_contents($_FILES['risupload']['tmp_name']);
-    // function remove_breaks($matches) {
-    //   return preg_replace( "/\r|\n/", " ", $matches[1] )."\nAD  -";
-    // }
-    // $str = preg_replace_callback ( "/(AB  - (.*[\n]){2,}?)[A-Z]{2}  -/" , "remove_breaks" , $str );
-    // file_put_contents($_FILES['risupload']['tmp_name'], $str);
-
 
     add_filter( 'mime_types', 'wpse_mime_types' );
     function wpse_mime_types( $existing_mimes ) {
@@ -130,27 +122,10 @@ function bib_importer_page() {
 		$lib = new RefLib();
 
     $tmpfile = $_FILES['bibupload']['tmp_name'];
-    // echo $_FILES['bibupload']['type'];
 
     $name = basename($_FILES["bibupload"]["name"]);
 
     $lib->SetContentsFile($tmpfile);
-    // print_r($lib);
-
-
-    // $destination = plugin_dir_path( __FILE__ ) . basename($_FILES["bibupload"]["name"]);
-    // echo "Moving $source to $destination</br>";
-    // $success = move_uploaded_file($source, $destination);
-    // echo "$success";
-    // $filename = $_FILES['bibupload']['tmp_name'];
-    // echo $filename;
-    // //$filename =  plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/tests/data/cpc-endnote.xml';
-    // //print_r($_FILES);
-		// $lib->SetContentsFile($filename);
-    // //$lib->SetContentsFile(plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/tests/data/cpc-endnote.xml');
-    //
-
-    // include( plugin_dir_path( __FILE__ ) . 'bib-class.php');
 
     echo "<h4>Importing " .count($lib->refs)." bibliography entries:</h4>";
 
