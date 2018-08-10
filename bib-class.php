@@ -1,19 +1,9 @@
 <?php
 
-//https://carlalexander.ca/designing-entities-wordpress-custom-post-types/
-
 add_shortcode( 'classtest', 'class_test_func');
 
 function class_test_func() {
   require( plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/reflib.php');
-
-  // $str = file_get_contents(plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/tests/data/multiline-abstract.ris');
-  // function remove_breaks($matches) {
-  // 	return preg_replace( "/\r|\n/", " ", $matches[1] )."\nAD  -";
-  // }
-  // $str = preg_replace_callback ( "/(AB  - (.*[\n]){2,}?)[A-Z]{2}  -/" , "remove_breaks" , $str );
-  // echo "<pre>".$str."</pre>";
-  // file_put_contents(plugin_dir_path( __FILE__ ) . 'lib/RefLib-master/tests/data/multiline-abstract-output.ris', $str);
 
   $lib = new RefLib();
   // $lib->SetContentsFile($string);
@@ -86,135 +76,6 @@ class Bibliography_Entry
 
   public function generate_citation() {
 
-    // $author_arr = $this->authors;
-    // $authorlist = "";
-    // if (count($author_arr) == 1 || count($author_arr) == 0) {
-    //   $authorlist = $author_arr[0];
-    // } else if (count($author_arr) == 2) {
-    //   $authorlist = $author_arr[0] . " & " . $author_arr[1];
-    // } else {
-    //   for ($i = 0; $i <= count($author_arr)-2; $i++) {
-    //     $authorlist = $authorlist . $author_arr[$i] . "; ";
-    //   }
-    //   $authorlist = $authorlist . "& " . $author_arr[count($author_arr)-1];
-    // }
-    //
-    // //generate editor array and format editor list for citation
-    // $editor_arr = $this->editors;
-    // $editorlist = "";
-    // if (count($editor_arr) == 1 || count($editor_arr) == 0) {
-    //   $editorlist = $editor_arr[0];
-    // } else if (count($editor_arr) == 2) {
-    //   $editorlist = $editor_arr[0] . " & " . $editor_arr[1];
-    // } else {
-    //   for ($i = 0; $i <= count($editor_arr)-2; $i++) {
-    //     $editorlist = $editorlist . $editor_arr[$i] . "; ";
-    //   }
-    //   $editorlist = $editorlist . "& " . $editor_arr[count($editor_arr)-1];
-    // }
-    // $editors = "";
-    // if (count($editor_arr)>1) $editorlist = "$editorlist (Eds.)";
-    // else if ((count($editor_arr)) == 1 && !empty($editor_arr[0])) {
-    //     $editorlist = "$editorlist (Ed.)";
-    //   }
-    //
-    // $pages = $this->pages;
-    // if ($volume && $pages) {
-    //   $volume = "$volume, ";
-    //   $pages = "$pages.";
-    // } elseif ($volume) $volume = "$volume.";
-    // elseif ($pages) $pages = "$pages.";
-    //
-    // $journal = $this->{'title-secondary'};
-    // if ($journal && ($volume || $pages)) {
-    //   $journal = "$journal, ";
-    // } else if ($journal) $journal = "$journal.";
-    //
-    // if ($this->year) $year = "($this->year).";
-    // $title = $this->title;
-    //
-    // $city = "";
-    // $publisher = "";
-    // if ($this->publisher && $this->city) {
-    //   $city = "$this->city: ";
-    //   $publisher = "$this->publisher.";
-    // } else if ($this->city) $city = "$city.";
-    //   else if ($this->publisher) $publisher = "$publisher.";
-    //
-    // $url = get_permalink($id);
-    //
-    // switch($this->type) {
-    //
-    //   case "Journal Article":
-    //   case "Magazine":
-    //     if ($this->volume && $this->number) $volume = "$this->volume($this->number)";
-    //     else if ($this->volume) $volume = $this->volume;
-    //     else if ($this->number) $volume = $this->number;
-    //     else $volume = "";
-    //     $citation = "$authorlist $year <a href='$url'>$title.</a> <i>$journal</i> <i>$volume</i> $pages";
-    //     break;
-    //
-    //   case "Book":
-    //   case "Serial":
-    //     $title = "<i>$title</i>";
-    //   case "Conference":
-    //   case "Report":
-    //     if ($editorlist && $authorlist) {
-    //       $citation = "$authorlist $year <a href='$url'>$title.</a> {$editorlist} {$city}{$publisher}";
-    //     } else if ($editorlist) {
-    //       $citation = "$editorlist $year <a href='$url'>$title.</a> {$city}{$publisher}";
-    //     } else if ($authorlist) {
-    //       $citation = "$authorlist $year <a href='$url'>$title.</a> {$city}{$publisher}";
-    //     } else {
-    //       $citation = "<a href='$url'>$title</a> {$year} {$city}{$publisher}";
-    //     }
-    //
-    //     break;
-    //
-    //   case "Thesis/Dissertation":
-    //     $citation = "$authorlist $year <a href='$url'>$title.</a> Master's thesis / Doctoral dissertation, $publisher";
-    //   break;
-    //
-    //   case "Book Section":
-    //   case "Book Chapter":
-    //   case "Edited Book":
-    //   case "Generic":
-    //     $booktitle = "";
-    //     if ($this->{'title-secondary'}) {
-    //       $booktitle = "<i>".$this->{'title-secondary'}."</i>";
-    //       if ($this->pages) $booktitle = "$booktitle (pp. $pages).";
-    //     }
-    //     $title = "<i>$title</i>";
-    //
-    //     if ($editorlist && $authorlist) {
-    //       if ($booktitle) $citation = "$authorlist $year <a href='$url'>$title.</a> In $editorlist, $booktitle. $city $publisher";
-    //       else $citation = "$authorlist $year <a href='$url'>$title.</a> In $editorlist. $city $publisher";
-    //     } else if ($editorlist) {
-    //       if ($booktitle) $citation = "<a href='$url'>$title.</a> $year. In $editorlist, $booktitle. $city $publisher";
-    //       else $citation = "<a href='$url'>$title.</a> $year. $editorlist. $city $publisher";
-    //     } else if ($authorlist) $citation = "$authorlist $year <a href='$url'>$title.</a> {$city}{$publisher}";
-    //     else $citation = "<a href='$url'>$title</a> {$year} {$city}{$publisher}";
-    //
-    //   break;
-    //
-    //   if ($this->pmcid) $citation = "$citation PMCID: $this->pmcid";
-    //   if ($this->nihmsid) $citation = "$citation NIHMSID: $this->nihmsid";
-    //
-    //   if ($citation = "") $citation = "<a href='$url'>$title.</a>";
-    //
-    // // if ($this->type == "Journal Article" || $this->type == "Magazine") {
-    // //   if ($this->volume && $this->number) $volume = "$this->volume($this->number)";
-    // //   else if ($this->volume) $volume = $this->volume;
-    // //   else if ($this->number) $volume = $this->number;
-    // //   else $volume = "";
-    // //
-    // //
-    // //
-    // //   $citation = "$authorlist $year <a href='$url'>$title.</a> <i>$journal</i> <i>$volume</i> $pages";
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
     $author_arr = $this->authors;
     $authorlist = "";
     if (count($author_arr) == 1 || count($author_arr) == 0) {
@@ -227,7 +88,6 @@ class Bibliography_Entry
       }
       $authorlist = $authorlist . "& " . $author_arr[count($author_arr)-1];
     }
-    // $authorlist = "AUTHORS GO HERE: ".$this->authors;
 
     //generate editor array and format editor list for citation
     $editor_arr = $this->editors;
