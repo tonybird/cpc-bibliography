@@ -156,21 +156,10 @@ function bib_keyword_search() {
     error_log("Ending search");
 
 
-    // echo "<p>CLUSTERS:</p><pre>";
-    // print_r($clusters);
-    // echo "</pre><p>ARTICLES</p><pre>";
-    // print_r($articles);
-    // echo "</pre>";
-
   //
   // Output to CSV
   //
-
-    // // PRINT ARTICLES TO PAGE //
-    // $articles_with_keywords = array_filter($articles, function ($var) {
-    // return ($var['nbr_keywords'] > 0);  });
-    // echo "<pre>"; print_r($articles_with_keywords); echo "</pre>";
-    //error_log("Ending print");
+    
     $rows = array();
 
     $header = array(
@@ -261,10 +250,6 @@ function bib_keyword_search() {
       $row[24] = ($article['funding_info'] !== "") ? $article['p2c'] : "";
       $row[25] = ($article['funding_info'] !== "") ? $article['t32'] : "";
       $row[26] = ($article['funding_info'] !== "") ? $article['r24'] : "";
-
-      // $row[24] = $article['p2c'];
-      // $row[25] = $article['t32'];
-      // $row[26] = $article['r24'];
       $row[27] = $article['nbr_keywords'];
 
       ksort($article['clusters']);
@@ -301,17 +286,6 @@ function bib_keyword_search() {
         }
 
       }
-
-
-      //
-      //         # individual has_XXXX_kw_XXXX booleans
-      //         for keyword in sorted(clusters[cluster]['keywords'].keys()):
-      //             if articles[id]['clusters'][cluster]['keywords'][keyword] > 0:
-      //                 row.append(1)
-      //             else:
-      //                 row.append(0)
-      //
-      //     writer.writerow(row)
 
       $rows[] = $row;
     }
