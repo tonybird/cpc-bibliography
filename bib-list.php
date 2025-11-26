@@ -5,6 +5,21 @@
 
 add_shortcode('bibliography', 'display_entries');
 
+function get_meta_values($key) {
+    global $wpdb;
+  $result = $wpdb->get_col(
+    $wpdb->prepare( "
+      SELECT DISTINCT pm.meta_value FROM {$wpdb->postmeta} pm
+      LEFT JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+      WHERE pm.meta_key = '%s'
+      AND p.post_status = 'publish'
+      ORDER BY pm.meta_value",
+      $key
+    )
+  );
+  return $result;
+}
+
 function display_entries() {
   ob_start();
 
@@ -32,21 +47,6 @@ $type_options = array(
   "Generic" => "Generic/Unpublished",
   "Conference" => "Conference/Presentation"
 );
-
-function get_meta_values($key) {
-    global $wpdb;
-	$result = $wpdb->get_col(
-		$wpdb->prepare( "
-			SELECT DISTINCT pm.meta_value FROM {$wpdb->postmeta} pm
-			LEFT JOIN {$wpdb->posts} p ON p.ID = pm.post_id
-			WHERE pm.meta_key = '%s'
-			AND p.post_status = 'publish'
-			ORDER BY pm.meta_value",
-			$key
-		)
-	);
-	return $result;
-}
 
 ?>
 <script>
@@ -168,60 +168,82 @@ if (isset($_GET['adv']) && $_GET['adv']=='true') {
 }
 
 // Prepare WP query from standard search parameters
-$meta_query['relation'] = 'AND';
-$meta_query['citation-or-abstract'] = array(
-    array(
-      'key' => 'citation',
-      'value' => (isset($_GET['q'])) ? $_GET['q'] : "",
-      'compare' => 'LIKE'
-    ),
-    array(
-      'key' => 'abstract',
-      'value' => (isset($_GET['q'])) ? $_GET['q'] : "",
-      'compare' => 'LIKE'
-    ),
-    'relation' => 'OR'
-  );
+$meta_query = array( 'relation' => 'AND' );
 
-// Following 3 clauses must always be present for sorting
-$meta_query['author'] = array(
-  'key' => 'authorlist',
-  'value' => (isset($_GET['a'])) ? $_GET['a'] : "",
-  'compare' => 'LIKE'
-);
-$meta_query['year'] = array(
-  'key' => 'year',
-  'value' => (isset($_GET['y'])) ? $_GET['y'] : "",
-  'compare' => 'LIKE'
-);
-
-$meta_query['title'] = array(
-  'key' => 'title',
-  'value' => (isset($_GET['t'])) ? $_GET['t'] : "",
-  'compare' => 'LIKE'
-);
-
-if (!empty($_GET['type'])) {
-  $type_clause['key'] = 'type';
-  $type_clause['value'] = $_GET['type'];
-  $type_clause['compare'] = '=';
-  $meta_query['type'] = $type_clause;
+/**
+ * q = keyword search across citation + abstract
+ */
+if (!empty($_GET['q'])) {
+    $meta_query[] = array(
+        'relation' => 'OR',
+        array(
+            'key'     => 'citation',
+            'value'   => $_GET['q'],
+            'compare' => 'LIKE'
+        ),
+        array(
+            'key'     => 'abstract',
+            'value'   => $_GET['q'],
+            'compare' => 'LIKE'
+        )
+    );
 }
 
-// If additional search fields are present, add them to the query
-$additional_fields = array(
-  "j" => "title-secondary",
-  "p" => "publisher"
-);
-
-foreach ($additional_fields as $k => $v) {
-  if (!empty($_GET[$k])) {
-    $meta_query[$v] = array(
-      'key' => $v,
-      'value' => $_GET[$k],
-      'compare' => 'LIKE'
+/**
+ * Advanced search fields
+ */
+if (!empty($_GET['a'])) { // Author
+    $meta_query[] = array(
+        'key'     => 'authorlist',
+        'value'   => $_GET['a'],
+        'compare' => 'LIKE'
     );
-  }
+}
+
+if (!empty($_GET['y'])) { // Year
+    $meta_query[] = array(
+        'key'     => 'year',
+        'value'   => $_GET['y'],
+        'compare' => 'LIKE'
+    );
+}
+
+if (!empty($_GET['t'])) { // Title
+    $meta_query[] = array(
+        'key'     => 'title',
+        'value'   => $_GET['t'],
+        'compare' => 'LIKE'
+    );
+}
+
+/**
+ * Additional fields: Journal + Publisher
+ */
+if (!empty($_GET['j'])) {
+    $meta_query[] = array(
+        'key'     => 'title-secondary',
+        'value'   => $_GET['j'],
+        'compare' => 'LIKE'
+    );
+}
+
+if (!empty($_GET['p'])) {
+    $meta_query[] = array(
+        'key'     => 'publisher',
+        'value'   => $_GET['p'],
+        'compare' => 'LIKE'
+    );
+}
+
+/**
+ * Type filter
+ */
+if (!empty($_GET['type'])) {
+    $meta_query[] = array(
+        'key'     => 'type',
+        'value'   => $_GET['type'],
+        'compare' => '='
+    );
 }
 
 $sort_orders = array(
